@@ -6,449 +6,108 @@
   <meta name="theme-color" content="#f5f5f7" />
   <title>Apple 教育價查詢｜台灣</title>
   <style>
-    :root {
-      color-scheme: light;
-      --text: #1d1d1f;
-      --muted: #6e6e73;
-      --faint: #86868b;
-      --background: #f5f5f7;
-      --surface: #ffffff;
-      --line: #d2d2d7;
-      --line-soft: rgba(29, 29, 31, 0.09);
-      --blue: #0066cc;
-      --green: #18794e;
-      --shadow: 0 12px 35px rgba(0, 0, 0, 0.055);
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      color: var(--text);
-      background: var(--background);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      font-size: 15px;
-      line-height: 1.45;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    button, input, select { font: inherit; }
-    button, select { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
-
-    :focus-visible {
-      outline: 3px solid rgba(0, 102, 204, 0.35);
-      outline-offset: 3px;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(245, 245, 247, 0.86);
-      border-bottom: 1px solid var(--line-soft);
-      backdrop-filter: blur(18px) saturate(180%);
-      -webkit-backdrop-filter: blur(18px) saturate(180%);
-    }
-
-    .topbar-inner,
-    .page {
-      width: min(1420px, calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    .topbar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 54px;
-      gap: 18px;
-    }
-
-    .brand {
-      font-size: 15px;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
-    }
-
-    .topbar-links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .topbar-links a:hover { color: var(--blue); }
-    .page { padding: 46px 0 80px; }
-
-    .page-header {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 30px;
-      margin-bottom: 26px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.1rem);
-      font-weight: 700;
-      letter-spacing: -0.06em;
-      line-height: 1.05;
-    }
-
-    .page-header p {
-      max-width: 470px;
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .updated {
-      flex: 0 0 auto;
-      color: var(--faint);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: minmax(250px, 1fr) auto;
-      align-items: center;
-      gap: 10px;
-      padding: 13px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid var(--line-soft);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .field,
-    .select,
-    .reset-button {
-      min-height: 42px;
-      border-radius: 11px;
-      font-size: 14px;
-    }
-
-    .field,
-    .select {
-      width: 100%;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--line);
-      outline: 0;
-    }
-
-    .field { padding: 0 13px; }
-    .select { padding: 0 12px; }
-    .field::placeholder { color: #9a9aa0; }
-    .field:focus,
-    .select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12); }
-
-    .reset-button {
-      padding: 0 15px;
-      color: var(--blue);
-      background: transparent;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-
-    .reset-button:hover { background: #eef5ff; }
-
-    .category-filter {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 2px;
-      scrollbar-width: none;
-    }
-
-    .category-filter::-webkit-scrollbar { display: none; }
-
-    .category-button {
-      flex: 0 0 auto;
-      min-height: 36px;
-      padding: 0 14px;
-      color: var(--muted);
-      background: #f6f6f8;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 13px;
-      white-space: nowrap;
-      transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-    }
-
-    .category-button:hover { color: var(--text); }
-
-    .category-button[aria-pressed="true"] {
-      color: #fff;
-      background: var(--blue);
-      border-color: var(--blue);
-    }
-
-    .list-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 19px 2px 11px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .list-meta strong { color: var(--text); font-weight: 650; }
-
-    .list-wrap {
-      overflow-x: auto;
-      background: var(--surface);
-      border: 1px solid var(--line-soft);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    table {
-      width: 100%;
-      min-width: 1370px;
-      border-collapse: separate;
-      border-spacing: 0;
-      text-align: left;
-    }
-
-    th,
-    td {
-      padding: 14px 15px;
-      border-bottom: 1px solid var(--line-soft);
-      vertical-align: top;
-    }
-
-    th {
-      color: var(--muted);
-      background: #fafafd;
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    tbody tr:last-child td { border-bottom: 0; }
-    tbody tr.product-row { cursor: pointer; }
-    tbody tr.product-row:hover td { background: #fbfcff; }
-    tbody tr.product-row.is-expanded td { background: #fbfcff; border-bottom-color: transparent; }
-    tbody tr.product-row:focus-visible td:first-child { box-shadow: inset 3px 0 0 var(--blue); }
-    tbody tr.detail-row:hover td { background: #fff; }
-
-    .detail-row[hidden] { display: none; }
-
-    .detail-row > td {
-      padding-top: 0;
-      background: #fbfcff;
-      border-bottom: 1px solid var(--line-soft);
-    }
-
-    .detail-panel {
-      padding: 16px;
-      background: #fff;
-      border: 1px solid var(--line-soft);
-      border-radius: 12px;
-    }
-
-    .detail-heading {
-      margin-bottom: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .category {
-      width: 82px;
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .product-name {
-      min-width: 210px;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-    }
-
-    .product-row.is-expanded .product-name { color: var(--blue); }
-
-    .config-summary { min-width: 330px; }
-
-    .summary-text {
-      display: -webkit-box;
-      overflow: hidden;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-
-    .config-grid {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      gap: 12px 14px;
-    }
-
-    .config-field {
-      display: grid;
-      flex: 0 1 clamp(180px, 22vw, 260px);
-      min-width: min(180px, 100%);
-      max-width: 260px;
-      gap: 4px;
-    }
-
-    .config-field--keyboard,
-    .config-field--adapter,
-    .config-field--connectivity,
-    .config-field--material {
-      flex-basis: clamp(210px, 24vw, 300px);
-      max-width: 300px;
-    }
-
-    .config-field span {
-      color: var(--faint);
-      font-size: 11px;
-      line-height: 1.2;
-    }
-
-    .config-field select {
-      width: 100%;
-      max-width: 100%;
-      min-height: 34px;
-      padding: 0 8px;
-      color: var(--text);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      font-size: 12px;
-    }
-
-    .config-field select:hover { border-color: #9b9ba1; }
-
-    .variant-line,
-    .config-static {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .part-number {
-      min-width: 128px;
-      color: var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .part-number.is-pending {
-      color: var(--muted);
-      font-family: inherit;
-      font-weight: 500;
-    }
-
-    .price {
-      min-width: 110px;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .education-price { color: var(--blue); font-weight: 650; }
-
-    .saving {
-      min-width: 100px;
-      color: var(--green);
-      font-weight: 650;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .saving.is-zero { color: var(--faint); font-weight: 500; }
-
-    .official-links {
-      min-width: 145px;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .official-links a { color: var(--blue); }
-    .official-links a:hover { text-decoration: underline; }
-    .official-links span { margin: 0 6px; color: var(--line); }
-
-    .empty {
-      padding: 54px 20px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .empty strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text);
-      font-size: 18px;
-    }
-
-    .source-note {
-      margin: 16px 2px 0;
-      color: var(--faint);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .source-note a { color: var(--blue); }
-    .source-note a:hover { text-decoration: underline; }
-
-    @media (max-width: 720px) {
-      .topbar-inner,
-      .page { width: min(100% - 28px, 1420px); }
-      .topbar-links a { display: none; }
-      .page { padding-top: 34px; }
-      .page-header { display: block; }
-      .updated { display: block; margin-top: 16px; }
-      .toolbar { grid-template-columns: 1fr; }
-      .category-filter { grid-column: 1; }
-      .reset-button { grid-column: 1; }
-      .list-meta { align-items: start; flex-direction: column; gap: 4px; }
-    }
-
-    @media (prefers-reduced-transparency: reduce) {
-      .topbar { background: var(--background); backdrop-filter: none; -webkit-backdrop-filter: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
+    :root { color-scheme:light; --text:#1d1d1f; --muted:#6e6e73; --background:#f5f5f7; --surface:#fff; --line:#d2d2d7; --blue:#0066cc; --green:#18794e; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--text); background:var(--background); font:15px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC",sans-serif; -webkit-font-smoothing:antialiased; }
+    body.modal-open { overflow:hidden; }
+    button,input,select { font:inherit; } button,select { cursor:pointer; }
+    a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
+    :focus-visible { outline:3px solid #0066cc; outline-offset:3px; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .topbar { border-bottom:1px solid #e3e3e8; }
+    .topbar-inner,.page { width:min(1200px,calc(100% - 64px)); margin:auto; }
+    .topbar-inner { min-height:82px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .brand { margin:0; font-size:22px; font-weight:650; letter-spacing:-.04em; }
+    .topbar-links,.official-links { display:flex; gap:18px; font-size:12px; }
+    .page { padding:28px 0 40px; }
+    .updated { color:var(--muted); font-size:12px; }
+    .toolbar { display:grid; grid-template-columns:1fr auto; gap:18px 16px; align-items:center; }
+    .field { width:100%; min-height:48px; padding:0 16px; color:var(--text); background:white; border:1px solid var(--line); border-radius:10px; font-size:16px; }
+    .reset-button { grid-column:2; grid-row:1; min-height:44px; border:0; background:transparent; color:var(--blue); padding:0 10px; }
+    .category-filter { grid-column:1 / -1; display:flex; gap:6px; overflow-x:auto; padding:4px; margin:-4px; }
+    .category-button { flex:none; min-height:40px; padding:0 18px; border:1px solid transparent; border-radius:7px; color:var(--muted); background:transparent; font-size:14px; }
+    .category-button:hover { background:#e9e9ed; color:var(--text); }
+    .category-button[aria-pressed="true"] { background:var(--text); color:white; }
+    .list-meta { display:flex; justify-content:space-between; gap:16px; margin:24px 0 12px; color:var(--muted); font-size:12px; }
+    .list-meta strong { font-weight:600; color:var(--text); }
+    .list-wrap { background:white; border:1px solid #e0e0e5; border-radius:12px; overflow:clip; }
+    .product-row { position:relative; display:grid; grid-template-columns:minmax(0,1fr) 225px; gap:12px 32px; padding:24px 28px; border-bottom:1px solid #e9e9ee; cursor:pointer; }
+    .product-row:last-child { border-bottom:0; }
+    .product-row:hover,.product-row:focus-within { background:#fafbfe; }
+    .product-trigger { border:0; padding:0; background:transparent; color:inherit; font:inherit; text-align:left; cursor:pointer; }
+    .product-heading { display:flex; align-items:baseline; gap:12px; margin-bottom:7px; }
+    .product-name { margin:0; font-size:18px; font-weight:650; letter-spacing:-.025em; }
+    .category { font-size:11px; color:var(--muted); }
+    .summary-text { font-size:13px; color:var(--muted); overflow-wrap:anywhere; }
+    .part-number { font-size:13px; font-weight:550; overflow-wrap:anywhere; }
+    .part-label { font-size:11px; color:var(--muted); margin-right:10px; font-weight:400; }
+    .part-line { margin-top:9px; }
+    .is-pending { color:#875b00; }
+    .price-block { text-align:right; font-variant-numeric:tabular-nums; }
+    .education-price { color:var(--blue); display:flex; align-items:baseline; justify-content:flex-end; gap:10px; }
+    .education-price span { font-size:12px; }
+    .education-price strong { font-size:26px; font-weight:650; letter-spacing:-.04em; white-space:nowrap; }
+    .price { margin-top:5px; color:var(--muted); font-size:12px; }
+    .saving { color:var(--green); font-size:12px; margin-top:3px; }
+    .saving.is-zero { color:var(--muted); }
+    .official-links { grid-column:1 / -1; gap:16px; }
+    .empty { padding:56px 20px; text-align:center; color:var(--muted); }
+    .empty strong { display:block; color:var(--text); margin-bottom:8px; }
+    .source-note { font-size:11px; line-height:1.8; color:var(--muted); margin:20px 0 0; }
+    dialog { width:min(900px,calc(100% - 48px)); max-height:calc(100dvh - 64px); padding:0; border:1px solid #dddde3; border-radius:18px; color:var(--text); background:white; box-shadow:0 28px 100px #0003; }
+    dialog::backdrop { background:rgba(20,25,35,.36); }
+    .dialog-shell { display:flex; flex-direction:column; max-height:calc(100dvh - 66px); }
+    .dialog-header { flex:none; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:24px 28px; border-bottom:1px solid #e9e9ee; }
+    .dialog-header h2 { margin:0; font-size:24px; letter-spacing:-.035em; }
+    .close-button { min-height:44px; padding:0 15px; background:#f5f5f7; color:var(--text); border:0; border-radius:8px; }
+    .dialog-body { min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 300px; }
+    .dialog-controls { padding:24px 28px 32px; overflow-y:auto; overscroll-behavior:contain; }
+    .config-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 16px; }
+    .config-field { min-width:0; display:flex; flex-direction:column; gap:7px; font-size:12px; color:var(--muted); }
+    .config-field select { width:100%; min-width:0; min-height:44px; padding:8px 28px 8px 10px; border:1px solid var(--line); border-radius:7px; background:white; color:var(--text); font-size:14px; }
+    .config-field--chip,.config-field--processor,.config-field--cores,.config-field--adapter { grid-column:1 / -1; }
+    .variant-line { display:none; }
+    .quote-panel { padding:24px; background:#f5f5f7; border-left:1px solid #e9e9ee; overflow-y:auto; }
+    .quote-label { margin:0 0 12px; font-size:12px; font-weight:600; }
+    .quote-config { margin:0 0 18px; font-size:13px; line-height:1.7; overflow-wrap:anywhere; }
+    .quote-panel .part-line { padding-bottom:20px; border-bottom:1px solid #dddde3; margin-bottom:20px; }
+    .quote-panel .part-label { display:block; margin-bottom:5px; }
+    .quote-panel .part-number { font-size:16px; }
+    .quote-panel .price-block { text-align:left; }
+    .quote-panel .education-price { display:block; }
+    .quote-panel .education-price span { display:block; }
+    .quote-panel .education-price strong { font-size:32px; }
+    .quote-panel .price,.quote-panel .saving { font-size:13px; }
+    .quote-panel .official-links { margin-top:24px; }
+    @media(max-width:700px) {
+      .topbar-inner,.page { width:calc(100% - 32px); }
+      .topbar-inner { min-height:72px; gap:12px; } .brand { font-size:19px; }
+      .topbar-links { gap:10px; font-size:11px; }
+      .page { padding-top:20px; } .toolbar { gap:14px 6px; }
+      .category-button { padding:0 14px; } .list-meta { margin-top:20px; gap:8px; font-size:11px; }
+      .product-row { grid-template-columns:1fr; padding:20px; gap:14px; }
+      .product-heading { justify-content:space-between; } .product-name { font-size:18px; }
+      .price-block { text-align:left; } .education-price { justify-content:flex-start; }
+      .product-row .price,.product-row .saving { display:inline-block; margin:4px 16px 0 0; }
+      .official-links { grid-column:1; }
+      dialog { width:100%; max-width:none; max-height:calc(100dvh - 16px); margin:auto 0 0; border-radius:18px 18px 0 0; }
+      .dialog-shell { max-height:calc(100dvh - 18px); } .dialog-header { padding:14px 20px; } .dialog-header h2 { font-size:21px; }
+      .dialog-body { display:flex; flex-direction:column; overflow:hidden; }
+      .dialog-controls { padding:20px; flex:1 1 auto; min-height:60px; }
+      .config-grid { gap:14px 12px; } .config-field select { font-size:16px; }
+      .quote-panel { flex:none; padding:16px 20px max(16px,env(safe-area-inset-bottom)); border-left:0; border-top:1px solid #dddde3; max-height:52dvh; }
+      .quote-label { display:none; } .quote-config { margin:0 0 8px; font-size:12px; line-height:1.5; }
+      .quote-panel .part-line { padding:0; margin:0 0 10px; border:0; } .quote-panel .part-label { display:inline; }
+      .quote-panel .part-number { font-size:14px; } .quote-panel .education-price { display:flex; }
+      .quote-panel .education-price strong { font-size:28px; } .quote-panel .price,.quote-panel .saving { display:inline-block; margin-right:14px; font-size:12px; }
+      .quote-panel .official-links { margin-top:10px; }
     }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">Apple 教育價查詢</div>
+      <h1 class="brand">Apple 教育價查詢</h1>
       <nav class="topbar-links" aria-label="官方入口">
         <a href="https://www.apple.com/tw-edu/store" target="_blank" rel="noreferrer">教育商店</a>
         <a href="https://www.apple.com/tw/store" target="_blank" rel="noreferrer">一般商店</a>
@@ -457,18 +116,10 @@
   </header>
 
   <main class="page">
-    <header class="page-header">
-      <div>
-        <h1>台灣大專院校教育價格</h1>
-        <p>搜尋、篩選產品；點擊產品列即可展開詳細規格與價格。</p>
-      </div>
-      <div class="updated">資料基準：2026/09/10 · 價格為目前列出的配置價格</div>
-    </header>
-
     <section class="toolbar" aria-label="查詢條件">
       <label>
         <span class="sr-only">搜尋產品</span>
-        <input class="field" id="searchInput" type="search" placeholder="搜尋型號、尺寸、晶片、容量或連線方式" autocomplete="off" />
+        <input class="field" id="searchInput" type="search" placeholder="搜尋產品、料號或規格" autocomplete="off" />
       </label>
       <div class="category-filter" id="categoryFilter" role="group" aria-label="產品類別">
         <button class="category-button" type="button" data-category="全部" aria-pressed="true">全部</button>
@@ -483,26 +134,10 @@
 
     <div class="list-meta">
       <span id="resultCount">顯示 24 款產品</span>
-      <span>價差＝一般價－教育價</span>
+      <span class="updated">資料核對日 2026/09/10</span>
     </div>
 
-    <div class="list-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">類別</th>
-            <th scope="col">產品／機型</th>
-            <th scope="col">配置摘要</th>
-            <th scope="col">型號</th>
-            <th scope="col">一般價</th>
-            <th scope="col">教育價</th>
-            <th scope="col">價差</th>
-            <th scope="col">官方入口</th>
-          </tr>
-        </thead>
-        <tbody id="productList"></tbody>
-      </table>
-    </div>
+    <div class="list-wrap" id="productList" aria-label="產品清單"></div>
 
     <p class="source-note">
       料號只採 Apple 台灣教育商店選購頁與官方支援資料；官方頁面未直接提供的配置顯示「待核對」，不使用推算值。資料核對日：2026/09/10。<br />
@@ -510,6 +145,12 @@
     </p>
   </main>
 
+  <dialog id="configurationDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-shell">
+      <header class="dialog-header"><h2 id="dialogTitle"></h2><button type="button" class="close-button" id="closeDialog" autofocus>關閉</button></header>
+      <div class="dialog-body"><div class="dialog-controls" id="dialogControls"></div><section class="quote-panel" id="dialogQuote" aria-label="目前配置報價" aria-live="polite"></section></div>
+    </div>
+  </dialog>
   <script>
     const categoryLinks = {
       Mac: { edu: 'https://www.apple.com/tw-edu/shop/buy-mac', retail: 'https://www.apple.com/tw/shop/buy-mac' },
@@ -1455,7 +1096,10 @@
     const productList = document.querySelector('#productList');
     const resultCount = document.querySelector('#resultCount');
     let activeCategory = '全部';
-    let expandedProductId = null;
+    let activeProductId = null;
+    const configurationDialog = document.querySelector('#configurationDialog');
+    const dialogControls = document.querySelector('#dialogControls');
+    const dialogQuote = document.querySelector('#dialogQuote');
 
     const formatMoney = (value) => 'NT$' + Number(value).toLocaleString('zh-TW');
     const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
@@ -1496,47 +1140,56 @@
       return '<div class="config-grid">' + fields + '</div><span class="variant-line">' + escapeHtml(variant.detail) + '</span>';
     }
 
+    function prices(variant) {
+      const difference = variant.retail - variant.education;
+      return '<div class="price-block"><div class="education-price"><span>教育價</span><strong>' + formatMoney(variant.education) + '</strong></div><div class="price">一般價 ' + formatMoney(variant.retail) + '</div><div class="saving' + (difference === 0 ? ' is-zero' : '') + '">' + (difference === 0 ? '價差：同價' : '省下 ' + formatMoney(difference)) + '</div></div>';
+    }
+
+    function partNumber(variant) {
+      return '<div class="part-line"><span class="part-label">完整料號</span><span class="part-number' + (variant.partNumber === UNKNOWN_PART_NUMBER ? ' is-pending' : '') + '">' + escapeHtml(variant.partNumber) + '</span></div>';
+    }
+
+    function officialLinks(product) {
+      return '<nav class="official-links" aria-label="' + escapeHtml(product.name) + ' 官方商店"><a href="' + escapeHtml(product.eduUrl) + '" target="_blank" rel="noreferrer">教育商店</a><a href="' + escapeHtml(product.retailUrl) + '" target="_blank" rel="noreferrer">一般商店</a></nav>';
+    }
+
     function render() {
       const query = searchInput.value.trim().toLowerCase();
-      const category = activeCategory;
       const visible = products.filter((product) => {
         const state = getSelectedState(product);
         const variant = getVariant(product, state);
         const optionText = product.controls.map((control) => getControlOptions(product, control, state).map((option) => option.label).join(' ')).join(' ');
         const searchable = [product.category, product.name, product.search, variant.detail, variant.partNumber, (product.partNumbers || []).join(' '), optionText].join(' ').toLowerCase();
-        return (!query || searchable.includes(query)) && (category === '全部' || product.category === category);
+        return (!query || searchable.includes(query)) && (activeCategory === '全部' || product.category === activeCategory);
       });
-
       resultCount.innerHTML = '顯示 <strong>' + visible.length + '</strong> 款產品';
+      productList.innerHTML = visible.length ? visible.map((product) => {
+        const variant = getVariant(product, getSelectedState(product));
+        return '<article class="product-row" data-product-id="' + escapeHtml(product.id) + '" aria-label="' + escapeHtml(product.name) + '"><div class="product-info"><div class="product-heading"><h2 class="product-name"><button type="button" class="product-trigger" aria-label="' + escapeHtml(product.name) + '，設定規格" aria-haspopup="dialog" aria-controls="configurationDialog">' + escapeHtml(product.name) + '</button></h2><span class="category">' + escapeHtml(product.category) + '</span></div><div class="summary-text">' + escapeHtml(variant.detail) + '</div>' + partNumber(variant) + '</div>' + prices(variant) + officialLinks(product) + '</article>';
+      }).join('') : '<div class="empty"><strong>找不到符合條件的產品</strong>請調整搜尋文字或產品類別。</div>';
+    }
 
-      if (!visible.length) {
-        expandedProductId = null;
-        productList.innerHTML = '<tr><td class="empty" colspan="8"><strong>找不到符合條件的產品</strong>請調整搜尋文字或產品類別。</td></tr>';
-        return;
-      }
+    function renderDialog() {
+      const product = products.find((item) => item.id === activeProductId);
+      if (!product) return;
+      const state = getSelectedState(product);
+      const variant = getVariant(product, state);
+      const focusedKey = dialogControls.contains(document.activeElement) ? document.activeElement.dataset.key : null;
+      const scrollTop = dialogControls.scrollTop;
+      document.querySelector('#dialogTitle').textContent = product.name;
+      dialogControls.innerHTML = renderControls(product, state, variant);
+      dialogQuote.innerHTML = '<h3 class="quote-label">目前配置</h3><p class="quote-config">' + escapeHtml(variant.detail) + '</p>' + partNumber(variant) + prices(variant) + officialLinks(product);
+      if (focusedKey) dialogControls.querySelector('[data-key="' + CSS.escape(focusedKey) + '"]')?.focus({ preventScroll: true });
+      dialogControls.scrollTop = scrollTop;
+    }
 
-      if (!visible.some((product) => product.id === expandedProductId)) expandedProductId = null;
-
-      productList.innerHTML = visible.map((product) => {
-        const state = getSelectedState(product);
-        const variant = getVariant(product, state);
-        const difference = variant.retail - variant.education;
-        const savingClass = difference === 0 ? 'saving is-zero' : 'saving';
-        const partNumberClass = variant.partNumber === UNKNOWN_PART_NUMBER ? 'part-number is-pending' : 'part-number';
-        const isExpanded = expandedProductId === product.id;
-        const productId = escapeHtml(product.id);
-        return '<tr class="product-row' + (isExpanded ? ' is-expanded' : '') + '" data-product-id="' + productId + '" tabindex="0" role="button" aria-expanded="' + isExpanded + '" aria-controls="details-' + productId + '">' +
-          '<td class="category">' + escapeHtml(product.category) + '</td>' +
-          '<td class="product-name">' + escapeHtml(product.name) + '</td>' +
-          '<td class="config-summary"><span class="summary-text">' + escapeHtml(variant.detail) + '</span></td>' +
-          '<td class="' + partNumberClass + '">' + escapeHtml(variant.partNumber) + '</td>' +
-          '<td class="price">' + formatMoney(variant.retail) + '</td>' +
-          '<td class="price education-price">' + formatMoney(variant.education) + '</td>' +
-          '<td class="' + savingClass + '">' + (difference ? formatMoney(difference) : '同價') + '</td>' +
-          '<td class="official-links"><a href="' + product.eduUrl + '" target="_blank" rel="noreferrer">教育商店</a><span>/</span><a href="' + product.retailUrl + '" target="_blank" rel="noreferrer">一般商店</a></td>' +
-          '</tr>' +
-          '<tr class="detail-row" id="details-' + productId + '"' + (isExpanded ? '' : ' hidden') + '><td colspan="8"><div class="detail-panel"><div class="detail-heading">完整配置</div>' + renderControls(product, state, variant) + '</div></td></tr>';
-      }).join('');
+    function openProduct(productId) {
+      activeProductId = productId;
+      renderDialog();
+      dialogControls.scrollTop = 0;
+      dialogQuote.scrollTop = 0;
+      configurationDialog.showModal();
+      document.body.classList.add('modal-open');
     }
 
     function setActiveCategory(category) {
@@ -1544,47 +1197,57 @@
       categoryButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.category === category)));
     }
 
-    function toggleProduct(productId, restoreFocus) {
-      expandedProductId = expandedProductId === productId ? null : productId;
-      render();
-      if (restoreFocus) {
-        const row = productList.querySelector('tr[data-product-id="' + CSS.escape(productId) + '"]');
-        if (row) row.focus();
-      }
-    }
-
     function reset() {
       searchInput.value = '';
       setActiveCategory('全部');
       Object.keys(selectionState).forEach((key) => delete selectionState[key]);
-      expandedProductId = null;
       render();
       searchInput.focus();
     }
 
-    productList.addEventListener('change', (event) => {
+    dialogControls.addEventListener('change', (event) => {
       const select = event.target.closest('select[data-product-id]');
       if (!select) return;
       const productId = select.dataset.productId;
       selectionState[productId] = Object.assign({}, selectionState[productId] || {}, { [select.dataset.key]: select.value });
+      renderDialog();
       render();
     });
-
+    document.querySelector('#closeDialog').addEventListener('click', () => configurationDialog.close());
+    configurationDialog.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(configurationDialog.querySelectorAll('button, select, a[href]')).filter((element) => !element.disabled && element.getClientRects().length);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    let backdropPressed = false;
+    const outsideDialog = (event) => {
+      const rect = configurationDialog.getBoundingClientRect();
+      return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+    };
+    configurationDialog.addEventListener('pointerdown', (event) => { backdropPressed = event.target === configurationDialog && outsideDialog(event); });
+    configurationDialog.addEventListener('click', (event) => {
+      if (backdropPressed && event.target === configurationDialog && outsideDialog(event)) configurationDialog.close();
+      backdropPressed = false;
+    });
+    configurationDialog.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      const row = productList.querySelector('[data-product-id="' + CSS.escape(activeProductId || '') + '"]');
+      activeProductId = null;
+      (row?.querySelector('.product-trigger') || searchInput).focus({ preventScroll: true });
+    });
     productList.addEventListener('click', (event) => {
       if (event.target.closest('a')) return;
-      const row = event.target.closest('tr.product-row');
-      if (!row) return;
-      toggleProduct(row.dataset.productId, true);
+      const row = event.target.closest('.product-row');
+      if (row) openProduct(row.dataset.productId);
     });
-
-    productList.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      const row = event.target.closest('tr.product-row');
-      if (!row) return;
-      event.preventDefault();
-      toggleProduct(row.dataset.productId, true);
-    });
-
     searchInput.addEventListener('input', render);
     categoryButtons.forEach((button) => button.addEventListener('click', () => {
       setActiveCategory(button.dataset.category);
