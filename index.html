@@ -1,0 +1,1603 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <title>Apple 教育價查詢｜台灣</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --faint: #86868b;
+      --background: #f5f5f7;
+      --surface: #ffffff;
+      --line: #d2d2d7;
+      --line-soft: rgba(29, 29, 31, 0.09);
+      --blue: #0066cc;
+      --green: #18794e;
+      --shadow: 0 12px 35px rgba(0, 0, 0, 0.055);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background: var(--background);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      font-size: 15px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select { font: inherit; }
+    button, select { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    :focus-visible {
+      outline: 3px solid rgba(0, 102, 204, 0.35);
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(245, 245, 247, 0.86);
+      border-bottom: 1px solid var(--line-soft);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+    }
+
+    .topbar-inner,
+    .page {
+      width: min(1420px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 54px;
+      gap: 18px;
+    }
+
+    .brand {
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .topbar-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .topbar-links a:hover { color: var(--blue); }
+    .page { padding: 46px 0 80px; }
+
+    .page-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 26px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: 1.05;
+    }
+
+    .page-header p {
+      max-width: 470px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .updated {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 13px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line-soft);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .field,
+    .select,
+    .reset-button {
+      min-height: 42px;
+      border-radius: 11px;
+      font-size: 14px;
+    }
+
+    .field,
+    .select {
+      width: 100%;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      outline: 0;
+    }
+
+    .field { padding: 0 13px; }
+    .select { padding: 0 12px; }
+    .field::placeholder { color: #9a9aa0; }
+    .field:focus,
+    .select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12); }
+
+    .reset-button {
+      padding: 0 15px;
+      color: var(--blue);
+      background: transparent;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .reset-button:hover { background: #eef5ff; }
+
+    .category-filter {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px;
+      scrollbar-width: none;
+    }
+
+    .category-filter::-webkit-scrollbar { display: none; }
+
+    .category-button {
+      flex: 0 0 auto;
+      min-height: 36px;
+      padding: 0 14px;
+      color: var(--muted);
+      background: #f6f6f8;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .category-button:hover { color: var(--text); }
+
+    .category-button[aria-pressed="true"] {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .list-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 19px 2px 11px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .list-meta strong { color: var(--text); font-weight: 650; }
+
+    .list-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line-soft);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 1370px;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 14px 15px;
+      border-bottom: 1px solid var(--line-soft);
+      vertical-align: top;
+    }
+
+    th {
+      position: sticky;
+      top: 54px;
+      z-index: 1;
+      color: var(--muted);
+      background: #fafafd;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr.product-row { cursor: pointer; }
+    tbody tr.product-row:hover td { background: #fbfcff; }
+    tbody tr.product-row.is-expanded td { background: #fbfcff; border-bottom-color: transparent; }
+    tbody tr.product-row:focus-visible td:first-child { box-shadow: inset 3px 0 0 var(--blue); }
+    tbody tr.detail-row:hover td { background: #fff; }
+
+    .detail-row[hidden] { display: none; }
+
+    .detail-row > td {
+      padding-top: 0;
+      background: #fbfcff;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .detail-panel {
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--line-soft);
+      border-radius: 12px;
+    }
+
+    .detail-heading {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .category {
+      width: 82px;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .product-name {
+      min-width: 210px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .product-row.is-expanded .product-name { color: var(--blue); }
+
+    .config-summary { min-width: 330px; }
+
+    .summary-text {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .config-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 12px 14px;
+    }
+
+    .config-field {
+      display: grid;
+      flex: 0 1 clamp(180px, 22vw, 260px);
+      min-width: min(180px, 100%);
+      max-width: 260px;
+      gap: 4px;
+    }
+
+    .config-field--keyboard,
+    .config-field--adapter,
+    .config-field--connectivity,
+    .config-field--material {
+      flex-basis: clamp(210px, 24vw, 300px);
+      max-width: 300px;
+    }
+
+    .config-field span {
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .config-field select {
+      width: 100%;
+      max-width: 100%;
+      min-height: 34px;
+      padding: 0 8px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .config-field select:hover { border-color: #9b9ba1; }
+
+    .variant-line,
+    .config-static {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .part-number {
+      min-width: 128px;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .part-number.is-pending {
+      color: var(--muted);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .price {
+      min-width: 110px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .education-price { color: var(--blue); font-weight: 650; }
+
+    .saving {
+      min-width: 100px;
+      color: var(--green);
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .saving.is-zero { color: var(--faint); font-weight: 500; }
+
+    .official-links {
+      min-width: 145px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .official-links a { color: var(--blue); }
+    .official-links a:hover { text-decoration: underline; }
+    .official-links span { margin: 0 6px; color: var(--line); }
+
+    .empty {
+      padding: 54px 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .source-note {
+      margin: 16px 2px 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .source-note a { color: var(--blue); }
+    .source-note a:hover { text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      .topbar-inner,
+      .page { width: min(100% - 28px, 1420px); }
+      .topbar-links a { display: none; }
+      .page { padding-top: 34px; }
+      .page-header { display: block; }
+      .updated { display: block; margin-top: 16px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .category-filter { grid-column: 1; }
+      .reset-button { grid-column: 1; }
+      .list-meta { align-items: start; flex-direction: column; gap: 4px; }
+      th { top: 54px; }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .topbar { background: var(--background); backdrop-filter: none; -webkit-backdrop-filter: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Apple 教育價查詢</div>
+      <nav class="topbar-links" aria-label="官方入口">
+        <a href="https://www.apple.com/tw-edu/store" target="_blank" rel="noreferrer">教育商店</a>
+        <a href="https://www.apple.com/tw/store" target="_blank" rel="noreferrer">一般商店</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <header class="page-header">
+      <div>
+        <h1>台灣大專院校教育價格</h1>
+        <p>搜尋、篩選產品；點擊產品列即可展開詳細規格與價格。</p>
+      </div>
+      <div class="updated">資料基準：2026/09/10 · 價格為目前列出的配置價格</div>
+    </header>
+
+    <section class="toolbar" aria-label="查詢條件">
+      <label>
+        <span class="sr-only">搜尋產品</span>
+        <input class="field" id="searchInput" type="search" placeholder="搜尋型號、尺寸、晶片、容量或連線方式" autocomplete="off" />
+      </label>
+      <div class="category-filter" id="categoryFilter" role="group" aria-label="產品類別">
+        <button class="category-button" type="button" data-category="全部" aria-pressed="true">全部</button>
+        <button class="category-button" type="button" data-category="Mac" aria-pressed="false">Mac</button>
+        <button class="category-button" type="button" data-category="iPad" aria-pressed="false">iPad</button>
+        <button class="category-button" type="button" data-category="Watch" aria-pressed="false">Watch</button>
+        <button class="category-button" type="button" data-category="Pencil" aria-pressed="false">Pencil</button>
+        <button class="category-button" type="button" data-category="Keyboard" aria-pressed="false">Keyboard</button>
+      </div>
+      <button class="reset-button" id="resetButton" type="button">清除條件</button>
+    </section>
+
+    <div class="list-meta">
+      <span id="resultCount">顯示 24 款產品</span>
+      <span>價差＝一般價－教育價</span>
+    </div>
+
+    <div class="list-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">類別</th>
+            <th scope="col">產品／機型</th>
+            <th scope="col">配置摘要</th>
+            <th scope="col">完整料號</th>
+            <th scope="col">一般價</th>
+            <th scope="col">教育價</th>
+            <th scope="col">價差</th>
+            <th scope="col">官方入口</th>
+          </tr>
+        </thead>
+        <tbody id="productList"></tbody>
+      </table>
+    </div>
+
+    <p class="source-note">
+      料號只採 Apple 台灣教育商店選購頁與官方支援資料；官方頁面未直接提供的配置顯示「待核對」，不使用推算值。資料核對日：2026/09/10。<br />
+      官方入口：<a href="https://www.apple.com/tw-edu/store" target="_blank" rel="noreferrer">Apple 台灣教育商店</a> · <a href="https://support.apple.com/zh-tw/102869" target="_blank" rel="noreferrer">Mac 機型與零件編號</a> · <a href="https://support.apple.com/zh-tw/106343" target="_blank" rel="noreferrer">iPad 機型與零件編號</a>
+    </p>
+  </main>
+
+  <script>
+    const categoryLinks = {
+      Mac: { edu: 'https://www.apple.com/tw-edu/shop/buy-mac', retail: 'https://www.apple.com/tw/shop/buy-mac' },
+      iPad: { edu: 'https://www.apple.com/tw-edu/shop/buy-ipad', retail: 'https://www.apple.com/tw/shop/buy-ipad' },
+      Watch: { edu: 'https://www.apple.com/tw-edu/shop/buy-watch', retail: 'https://www.apple.com/tw/shop/buy-watch' },
+      Pencil: { edu: 'https://www.apple.com/tw-edu/shop/select-apple-pencil', retail: 'https://www.apple.com/tw/shop/select-apple-pencil' },
+      Keyboard: { edu: 'https://www.apple.com/tw-edu/shop/select-ipad-keyboards', retail: 'https://www.apple.com/tw/shop/ipad/accessories/keyboards' }
+    };
+
+    const choice = (value, label) => ({ value: String(value), label: label || String(value) });
+    const choices = (values) => values.map((value) => Array.isArray(value) ? choice(value[0], value[1]) : choice(value));
+    const pricePair = (retail, education) => [retail, education];
+    const optionValues = (record) => Object.keys(record);
+    const DATA_CHECKED_AT = '2026-09-10';
+    const UNKNOWN_PART_NUMBER = '待核對';
+
+    function variantResult(data, partNumber) {
+      const result = Object.assign({}, data, {
+        partNumber: partNumber || UNKNOWN_PART_NUMBER,
+        checkedAt: DATA_CHECKED_AT
+      });
+      result.configuration = result.configuration || result.detail;
+      return result;
+    }
+
+    function knownPartNumbers(record) {
+      return Object.values(record || {}).filter(Boolean);
+    }
+
+    // 以下料號均直接取自 Apple 台灣教育商店選購頁的產品資料。
+    const macAirPartNumbers = {
+      '13 吋|10-8|星光色': 'MDHA4TA/A',
+      '13 吋|10-8|午夜色': 'MDHE4TA/A',
+      '13 吋|10-8|銀色': 'MDH74TA/A',
+      '13 吋|10-8|天藍色': 'MDHH4TA/A',
+      '15 吋|10-10|銀色': 'MDV94TA/A',
+      '15 吋|10-10|星光色': 'MDVD4TA/A',
+      '15 吋|10-10|天藍色': 'MDVQ4TA/A',
+      '15 吋|10-10|午夜色': 'MDVH4TA/A'
+    };
+
+    const macNeoPartNumbers = {
+      '靛青色|512GB': 'MHFG4TA/A',
+      '銀色|512GB': 'MHFC4TA/A',
+      '胭粉色|256GB': 'MHFH4TA/A',
+      '靛青色|256GB': 'MHFF4TA/A',
+      '銀色|256GB': 'MHFA4TA/A',
+      '青橘黃色|256GB': 'MHFD4TA/A',
+      '青橘黃色|512GB': 'MHFE4TA/A',
+      '胭粉色|512GB': 'MHFJ4TA/A'
+    };
+
+    const macProPartNumbers = {
+      '14 吋|M5|m5-10-10|標準玻璃|太空黑色': 'MDE14TA/A',
+      '14 吋|M5|m5-10-10|標準玻璃|銀色': 'MDE54TA/A',
+      '14 吋|M5|m5-10-10|奈米紋理玻璃|太空黑色': 'MEQJ4TA/A',
+      '14 吋|M5 Pro|m5pro-15-16|標準玻璃|太空黑色': 'MGDR4TA/A',
+      '14 吋|M5 Pro|m5pro-15-16|標準玻璃|銀色': 'MGDN4TA/A',
+      '14 吋|M5 Max|m5max-18-32|標準玻璃|太空黑色': 'MGDU4TA/A',
+      '14 吋|M5 Max|m5max-18-32|標準玻璃|銀色': 'MGDQ4TA/A',
+      '16 吋|M5 Pro|m5pro-18-20|標準玻璃|太空黑色': 'MGEA4TA/A',
+      '16 吋|M5 Pro|m5pro-18-20|標準玻璃|銀色': 'MGE44TA/A',
+      '16 吋|M5 Max|m5max-18-32|標準玻璃|太空黑色': 'MGED4TA/A',
+      '16 吋|M5 Max|m5max-18-32|標準玻璃|銀色': 'MGE74TA/A',
+      '16 吋|M5 Max|m5max-18-40|標準玻璃|太空黑色': 'MGEE4TA/A',
+      '16 吋|M5 Max|m5max-18-40|標準玻璃|銀色': 'MGE94TA/A'
+    };
+
+    const iMacPartNumbers = {
+      '8-8|粉紅色': 'MWUG3TA/A',
+      '8-8|綠色': 'MWUE3TA/A',
+      '8-8|銀色': 'MWUC3TA/A',
+      '8-8|藍色': 'MWUF3TA/A',
+      '10-10|粉紅色': 'MWV43TA/A',
+      '10-10|藍色': 'MWV13TA/A',
+      '10-10|銀色': 'MWUU3TA/A',
+      '10-10|綠色': 'MWUY3TA/A'
+    };
+
+    const macMiniPartNumbers = {
+      'M6|m6-12-12': 'MHQK4TA/A',
+      'M5 Pro|m5pro-15-16': 'MHQN4TA/A'
+    };
+
+    const macStudioPartNumbers = {
+      'M5 Max|m5max-18-32': 'MHL64TA/A',
+      'M5 Ultra|m5ultra-30-64': 'MHL74TA/A'
+    };
+
+    const ipadPartNumbers = {
+      '藍色|Wi-Fi|128GB': 'MD4A4TA/A',
+      '藍色|Wi-Fi|256GB': 'MD4H4TA/A',
+      '藍色|Wi-Fi|512GB': 'MD4Y4TA/A',
+      '銀色|Wi-Fi|128GB': 'MD3Y4TA/A',
+      '銀色|Wi-Fi|256GB': 'MD4G4TA/A',
+      '銀色|Wi-Fi|512GB': 'MD4Q4TA/A',
+      '粉紅色|Wi-Fi|128GB': 'MD4E4TA/A',
+      '粉紅色|Wi-Fi|256GB': 'MD4P4TA/A',
+      '粉紅色|Wi-Fi|512GB': 'MD5C4TA/A',
+      '黃色|Wi-Fi|128GB': 'MD4D4TA/A',
+      '黃色|Wi-Fi|256GB': 'MD4J4TA/A',
+      '黃色|Wi-Fi|512GB': 'MD5A4TA/A',
+      '黃色|Wi-Fi + 行動網路|128GB': 'MD7H4TA/A',
+      '黃色|Wi-Fi + 行動網路|256GB': 'MD7M4TA/A',
+      '黃色|Wi-Fi + 行動網路|512GB': 'MD7R4TA/A',
+      '藍色|Wi-Fi + 行動網路|128GB': 'MD7G4TA/A',
+      '藍色|Wi-Fi + 行動網路|256GB': 'MD7L4TA/A',
+      '藍色|Wi-Fi + 行動網路|512GB': 'MD7Q4TA/A',
+      '粉紅色|Wi-Fi + 行動網路|128GB': 'MD7J4TA/A',
+      '粉紅色|Wi-Fi + 行動網路|256GB': 'MD7N4TA/A',
+      '粉紅色|Wi-Fi + 行動網路|512GB': 'MD7T4TA/A',
+      '銀色|Wi-Fi + 行動網路|128GB': 'MD7F4TA/A',
+      '銀色|Wi-Fi + 行動網路|256GB': 'MD7K4TA/A',
+      '銀色|Wi-Fi + 行動網路|512GB': 'MD7P4TA/A'
+    };
+
+    const ipadMiniPartNumbers = {
+      '紫色|Wi-Fi|128GB': 'MXN93TA/A',
+      '紫色|Wi-Fi|256GB': 'MXNE3TA/A',
+      '紫色|Wi-Fi|512GB': 'MYH33TA/A',
+      '星光色|Wi-Fi|128GB': 'MXN83TA/A',
+      '星光色|Wi-Fi|256GB': 'MXND3TA/A',
+      '星光色|Wi-Fi|512GB': 'MYH23TA/A',
+      '太空灰色|Wi-Fi|128GB': 'MXN63TA/A',
+      '太空灰色|Wi-Fi|256GB': 'MXNA3TA/A',
+      '太空灰色|Wi-Fi|512GB': 'MYGY3TA/A',
+      '藍色|Wi-Fi|128GB': 'MXN73TA/A',
+      '藍色|Wi-Fi|256GB': 'MXNC3TA/A',
+      '藍色|Wi-Fi|512GB': 'MYH13TA/A',
+      '紫色|Wi-Fi + 行動網路|128GB': 'MXPR3TA/A',
+      '紫色|Wi-Fi + 行動網路|256GB': 'MXPY3TA/A',
+      '紫色|Wi-Fi + 行動網路|512GB': 'MYHF3TA/A',
+      '太空灰色|Wi-Fi + 行動網路|128GB': 'MXPN3TA/A',
+      '太空灰色|Wi-Fi + 行動網路|256GB': 'MXPT3TA/A',
+      '太空灰色|Wi-Fi + 行動網路|512GB': 'MYHC3TA/A',
+      '星光色|Wi-Fi + 行動網路|128GB': 'MXPQ3TA/A',
+      '星光色|Wi-Fi + 行動網路|256GB': 'MXPX3TA/A',
+      '星光色|Wi-Fi + 行動網路|512GB': 'MYHE3TA/A',
+      '藍色|Wi-Fi + 行動網路|128GB': 'MXPP3TA/A',
+      '藍色|Wi-Fi + 行動網路|256GB': 'MXPW3TA/A',
+      '藍色|Wi-Fi + 行動網路|512GB': 'MYHD3TA/A'
+    };
+
+    const ipadAirPartNumbers = {
+      '11 吋|太空灰色|Wi-Fi|128GB': 'MH304TA/A',
+      '11 吋|太空灰色|Wi-Fi|256GB': 'MH354TA/A',
+      '11 吋|太空灰色|Wi-Fi|512GB': 'MH3A4TA/A',
+      '11 吋|太空灰色|Wi-Fi|1TB': 'MH3G4TA/A',
+      '11 吋|星光色|Wi-Fi|128GB': 'MH334TA/A',
+      '11 吋|星光色|Wi-Fi|256GB': 'MH374TA/A',
+      '11 吋|星光色|Wi-Fi|512GB': 'MH3D4TA/A',
+      '11 吋|星光色|Wi-Fi|1TB': 'MH3J4TA/A',
+      '11 吋|紫色|Wi-Fi|128GB': 'MH344TA/A',
+      '11 吋|紫色|Wi-Fi|256GB': 'MH394TA/A',
+      '11 吋|紫色|Wi-Fi|512GB': 'MH3E4TA/A',
+      '11 吋|紫色|Wi-Fi|1TB': 'MH3K4TA/A',
+      '11 吋|藍色|Wi-Fi|128GB': 'MH314TA/A',
+      '11 吋|藍色|Wi-Fi|256GB': 'MH364TA/A',
+      '11 吋|藍色|Wi-Fi|512GB': 'MH3C4TA/A',
+      '11 吋|藍色|Wi-Fi|1TB': 'MH3H4TA/A',
+      '11 吋|太空灰色|Wi-Fi + 行動網路|128GB': 'MH784TA/A',
+      '11 吋|太空灰色|Wi-Fi + 行動網路|256GB': 'MH7D4TA/A',
+      '11 吋|太空灰色|Wi-Fi + 行動網路|512GB': 'MH7H4TA/A',
+      '11 吋|太空灰色|Wi-Fi + 行動網路|1TB': 'MH7M4TA/A',
+      '11 吋|星光色|Wi-Fi + 行動網路|128GB': 'MH7A4TA/A',
+      '11 吋|星光色|Wi-Fi + 行動網路|256GB': 'MH7F4TA/A',
+      '11 吋|星光色|Wi-Fi + 行動網路|512GB': 'MH7K4TA/A',
+      '11 吋|星光色|Wi-Fi + 行動網路|1TB': 'MH7P4TA/A',
+      '11 吋|紫色|Wi-Fi + 行動網路|128GB': 'MH7C4TA/A',
+      '11 吋|紫色|Wi-Fi + 行動網路|256GB': 'MH7G4TA/A',
+      '11 吋|紫色|Wi-Fi + 行動網路|512GB': 'MH7L4TA/A',
+      '11 吋|紫色|Wi-Fi + 行動網路|1TB': 'MH7Q4TA/A',
+      '11 吋|藍色|Wi-Fi + 行動網路|128GB': 'MH794TA/A',
+      '11 吋|藍色|Wi-Fi + 行動網路|256GB': 'MH7E4TA/A',
+      '11 吋|藍色|Wi-Fi + 行動網路|512GB': 'MH7J4TA/A',
+      '11 吋|藍色|Wi-Fi + 行動網路|1TB': 'MH7N4TA/A',
+      '13 吋|太空灰色|Wi-Fi|128GB': 'MH5N4TA/A',
+      '13 吋|太空灰色|Wi-Fi|256GB': 'MH5U4TA/A',
+      '13 吋|太空灰色|Wi-Fi|512GB': 'MH5Y4TA/A',
+      '13 吋|太空灰色|Wi-Fi|1TB': 'MH634TA/A',
+      '13 吋|星光色|Wi-Fi|128GB': 'MH5Q4TA/A',
+      '13 吋|星光色|Wi-Fi|256GB': 'MH5W4TA/A',
+      '13 吋|星光色|Wi-Fi|512GB': 'MH614TA/A',
+      '13 吋|星光色|Wi-Fi|1TB': 'MH654TA/A',
+      '13 吋|紫色|Wi-Fi|128GB': 'MH5T4TA/A',
+      '13 吋|紫色|Wi-Fi|256GB': 'MH5X4TA/A',
+      '13 吋|紫色|Wi-Fi|512GB': 'MH624TA/A',
+      '13 吋|紫色|Wi-Fi|1TB': 'MHDK4TA/A',
+      '13 吋|藍色|Wi-Fi|128GB': 'MH5P4TA/A',
+      '13 吋|藍色|Wi-Fi|256GB': 'MH5V4TA/A',
+      '13 吋|藍色|Wi-Fi|512GB': 'MH604TA/A',
+      '13 吋|藍色|Wi-Fi|1TB': 'MH644TA/A',
+      '13 吋|太空灰色|Wi-Fi + 行動網路|128GB': 'MH9D4TA/A',
+      '13 吋|太空灰色|Wi-Fi + 行動網路|256GB': 'MH9H4TA/A',
+      '13 吋|太空灰色|Wi-Fi + 行動網路|512GB': 'MH9M4TA/A',
+      '13 吋|太空灰色|Wi-Fi + 行動網路|1TB': 'MH9R4TA/A',
+      '13 吋|星光色|Wi-Fi + 行動網路|128GB': 'MH9F4TA/A',
+      '13 吋|星光色|Wi-Fi + 行動網路|256GB': 'MH9K4TA/A',
+      '13 吋|星光色|Wi-Fi + 行動網路|512GB': 'MH9P4TA/A',
+      '13 吋|星光色|Wi-Fi + 行動網路|1TB': 'MH9U4TA/A',
+      '13 吋|紫色|Wi-Fi + 行動網路|128GB': 'MH9G4TA/A',
+      '13 吋|紫色|Wi-Fi + 行動網路|256GB': 'MH9L4TA/A',
+      '13 吋|紫色|Wi-Fi + 行動網路|512GB': 'MH9Q4TA/A',
+      '13 吋|紫色|Wi-Fi + 行動網路|1TB': 'MH9V4TA/A',
+      '13 吋|藍色|Wi-Fi + 行動網路|128GB': 'MH9E4TA/A',
+      '13 吋|藍色|Wi-Fi + 行動網路|256GB': 'MH9J4TA/A',
+      '13 吋|藍色|Wi-Fi + 行動網路|512GB': 'MH9N4TA/A',
+      '13 吋|藍色|Wi-Fi + 行動網路|1TB': 'MH9T4TA/A'
+    };
+
+    const ipadProPartNumbers = {
+      '11 吋|標準玻璃|Wi-Fi|太空黑色|256GB': 'MDWK4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|太空黑色|512GB': 'MDWM4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|太空黑色|1TB': 'MDWP4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|太空黑色|2TB': 'MDWU4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|銀色|256GB': 'MDWL4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|銀色|512GB': 'MDWN4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|銀色|1TB': 'MDWQ4TA/A',
+      '11 吋|標準玻璃|Wi-Fi|銀色|2TB': 'MDWV4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi|太空黑色|1TB': 'MDWR4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi|太空黑色|2TB': 'MDWW4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi|銀色|1TB': 'MDWT4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi|銀色|2TB': 'MDWX4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|256GB': 'ME2N4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|512GB': 'ME2Q4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|1TB': 'ME2U4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|2TB': 'ME2Y4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|銀色|256GB': 'ME2P4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|銀色|512GB': 'ME2T4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|銀色|1TB': 'ME2V4TA/A',
+      '11 吋|標準玻璃|Wi-Fi + 行動網路|銀色|2TB': 'ME6A4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi + 行動網路|太空黑色|1TB': 'ME2W4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi + 行動網路|太空黑色|2TB': 'ME6C4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi + 行動網路|銀色|1TB': 'ME2X4TA/A',
+      '11 吋|奈米紋理玻璃|Wi-Fi + 行動網路|銀色|2TB': 'ME6D4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|太空黑色|256GB': 'MDYJ4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|太空黑色|512GB': 'MDYL4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|太空黑色|1TB': 'MDYN4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|太空黑色|2TB': 'MDYT4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|銀色|256GB': 'MDYK4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|銀色|512GB': 'MDYM4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|銀色|1TB': 'MDYP4TA/A',
+      '13 吋|標準玻璃|Wi-Fi|銀色|2TB': 'MDYU4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi|太空黑色|1TB': 'MDYQ4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi|太空黑色|2TB': 'MDYV4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi|銀色|1TB': 'MDYR4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi|銀色|2TB': 'MDYW4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|256GB': 'ME7W4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|512GB': 'ME7Y4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|1TB': 'ME8D4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|太空黑色|2TB': 'ME8J4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|銀色|256GB': 'ME7X4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|銀色|512GB': 'ME8C4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|銀色|1TB': 'ME8F4TA/A',
+      '13 吋|標準玻璃|Wi-Fi + 行動網路|銀色|2TB': 'ME8K4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi + 行動網路|太空黑色|1TB': 'ME8G4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi + 行動網路|太空黑色|2TB': 'ME8M4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi + 行動網路|銀色|1TB': 'ME8H4TA/A',
+      '13 吋|奈米紋理玻璃|Wi-Fi + 行動網路|銀色|2TB': 'ME8N4TA/A'
+    };
+
+    function priceFromProfile(profile, state, detail) {
+      return {
+        retail: profile.retail + (profile.memoryPrices[state.memory] || 0) + (profile.storagePrices[state.storage] || 0),
+        education: profile.education + (profile.memoryPrices[state.memory] || 0) + (profile.storagePrices[state.storage] || 0),
+        detail: detail
+      };
+    }
+
+    function staticProduct(config) {
+      return {
+        id: config.id,
+        category: config.category,
+        name: config.name,
+        search: config.search || '',
+        partNumbers: config.partNumbers || (config.partNumber ? [config.partNumber] : []),
+        eduUrl: config.eduUrl || categoryLinks[config.category].edu,
+        retailUrl: config.retailUrl || categoryLinks[config.category].retail,
+        controls: config.controls || [],
+        defaults: config.defaults || {},
+        getVariant: function (state) {
+          const data = config.variant ? config.variant(state) : { retail: config.retail, education: config.education, detail: config.detail };
+          return variantResult(data, data.partNumber || config.partNumber);
+        }
+      };
+    }
+
+    const products = [];
+
+    products.push({
+      id: 'macbook-neo',
+      category: 'Mac',
+      name: 'MacBook Neo',
+      search: '13 吋 6 核心 CPU 5 核心 GPU',
+      partNumbers: knownPartNumbers(macNeoPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'storage', label: '儲存空間', options: choices(['256GB', '512GB']) },
+        { key: 'color', label: '顏色', options: choices(['胭粉色', '銀色', '靛青色', '青橘黃色']) },
+        { key: 'keyboard', label: '鍵盤語言', options: choices(['中文／注音', '英文（美國）']) }
+      ],
+      defaults: { storage: '256GB', color: '胭粉色', keyboard: '中文／注音' },
+      getVariant: function (state) {
+        const is512 = state.storage === '512GB';
+        return variantResult({
+          retail: is512 ? 25900 : 22900,
+          education: is512 ? 22900 : 19900,
+          detail: '13 吋級｜6 核心 CPU／5 核心 GPU｜' + state.storage + '｜' + state.color + '｜' + state.keyboard
+        }, state.keyboard === '中文／注音' ? macNeoPartNumbers[state.color + '|' + state.storage] : null);
+      }
+    });
+
+    const macAirProfiles = {
+      '13 吋|8 核心 GPU': { retail: 42900, education: 39590, memoryPrices: { '16GB': 0, '24GB': 7000, '32GB': 14000 }, storagePrices: { '512GB': 0, '1TB': 7000, '2TB': 21000, '4TB': 42000 } },
+      '13 吋|10 核心 GPU': { retail: 46400, education: 42740, memoryPrices: { '16GB': 0, '24GB': 7000, '32GB': 14000 }, storagePrices: { '512GB': 0, '1TB': 7000, '2TB': 21000, '4TB': 42000 } },
+      '15 吋|10 核心 GPU': { retail: 49900, education: 46590, memoryPrices: { '16GB': 0, '24GB': 7000, '32GB': 14000 }, storagePrices: { '512GB': 0, '1TB': 7000, '2TB': 21000, '4TB': 42000 } }
+    };
+
+    products.push({
+      id: 'macbook-air',
+      category: 'Mac',
+      name: 'MacBook Air',
+      search: 'M5 輕薄筆電',
+      partNumbers: knownPartNumbers(macAirPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'size', label: '尺寸', options: choices(['13 吋', '15 吋']) },
+        { key: 'gpu', label: '晶片／GPU', options: function (state) { return state.size === '15 吋' ? choices(['10 核心 GPU']) : choices(['8 核心 GPU', '10 核心 GPU']); } },
+        { key: 'memory', label: '記憶體', options: function () { return choices(['16GB', '24GB', '32GB']); } },
+        { key: 'storage', label: '儲存空間', options: function () { return choices(['512GB', '1TB', '2TB', '4TB']); } },
+        { key: 'color', label: '顏色', options: choices(['天藍色', '午夜色', '星光色', '銀色']) },
+        { key: 'keyboard', label: '鍵盤語言', options: choices(['中文／注音', '英文（美國）', '日文']) },
+        { key: 'adapter', label: '電源轉接器', options: choices(['35W USB-C 電源轉接器', '雙 USB-C 35W 電源轉接器']) }
+      ],
+      defaults: { size: '13 吋', gpu: '8 核心 GPU', memory: '16GB', storage: '512GB', color: '天藍色', keyboard: '中文／注音', adapter: '35W USB-C 電源轉接器' },
+      getVariant: function (state) {
+        const key = state.size + '|' + state.gpu;
+        const profile = macAirProfiles[key] || macAirProfiles['13 吋|8 核心 GPU'];
+        const codeKey = state.size + '|' + (state.size === '15 吋' ? '10-10' : (state.gpu === '8 核心 GPU' ? '10-8' : '10-10')) + '|' + state.color;
+        const isPreconfigured = state.memory === '16GB' && state.storage === '512GB' && state.keyboard === '中文／注音' && state.adapter === '35W USB-C 電源轉接器';
+        return variantResult(priceFromProfile(profile, state, state.size + '｜M5｜' + state.gpu + '｜' + state.memory + '｜' + state.storage + '｜' + state.color + '｜' + state.keyboard), isPreconfigured ? macAirPartNumbers[codeKey] : null);
+      }
+    });
+
+    const macProProfiles = {
+      '14 吋|M5': { retail: 54900, education: 51690, memoryOptions: ['16GB', '24GB', '32GB'], memoryPrices: { '16GB': 0, '24GB': 7000, '32GB': 14000 }, storageOptions: ['512GB', '1TB', '2TB', '4TB'], storagePrices: { '512GB': 0, '1TB': 7000, '2TB': 14000, '4TB': 28000 } },
+      '14 吋|M5 Pro': { retail: 74900, education: 69790, memoryOptions: ['24GB', '48GB', '64GB'], memoryPrices: { '24GB': 0, '48GB': 14000, '64GB': 21000 }, storageOptions: ['1TB', '2TB', '4TB'], storagePrices: { '1TB': 0, '2TB': 17500, '4TB': 52500 } },
+      '16 吋|M5 Pro': { retail: 89900, education: 83190, memoryOptions: ['24GB', '48GB', '64GB'], memoryPrices: { '24GB': 0, '48GB': 14000, '64GB': 21000 }, storageOptions: ['1TB', '2TB', '4TB'], storagePrices: { '1TB': 0, '2TB': 21000, '4TB': 35000 } },
+      '14 吋|M5 Max': { retail: 119900, education: 109890, memoryOptions: ['36GB', '48GB', '64GB', '128GB'], memoryPrices: { '36GB': 0, '48GB': 14000, '64GB': 21000, '128GB': 56000 }, storageOptions: ['2TB', '4TB', '8TB'], storagePrices: { '2TB': 0, '4TB': 35000, '8TB': 70000 } },
+      '16 吋|M5 Max': { retail: 129900, education: 119890, memoryOptions: ['36GB', '48GB', '64GB', '128GB'], memoryPrices: { '36GB': 0, '48GB': 14000, '64GB': 21000, '128GB': 56000 }, storageOptions: ['2TB', '4TB', '8TB'], storagePrices: { '2TB': 0, '4TB': 35000, '8TB': 70000 } }
+    };
+
+    const macProCoreOptions = {
+      '14 吋|M5': ['m5-10-10'],
+      '14 吋|M5 Pro': ['m5pro-15-16', 'm5pro-18-20'],
+      '14 吋|M5 Max': ['m5max-18-32', 'm5max-18-40'],
+      '16 吋|M5 Pro': ['m5pro-18-20'],
+      '16 吋|M5 Max': ['m5max-18-32', 'm5max-18-40']
+    };
+
+    const macProCoreLabels = {
+      'm5-10-10': '10 核心 CPU／10 核心 GPU',
+      'm5pro-15-16': '15 核心 CPU／16 核心 GPU',
+      'm5pro-18-20': '18 核心 CPU／20 核心 GPU',
+      'm5max-18-32': '18 核心 CPU／32 核心 GPU',
+      'm5max-18-40': '18 核心 CPU／40 核心 GPU'
+    };
+
+    const macProOfficialBasePrices = {
+      '14 吋|M5|m5-10-10|標準玻璃': pricePair(64900, 61690),
+      '14 吋|M5|m5-10-10|奈米紋理玻璃': pricePair(70150, 66415),
+      '14 吋|M5 Pro|m5pro-15-16|標準玻璃': pricePair(84900, 79790),
+      '14 吋|M5 Pro|m5pro-15-16|奈米紋理玻璃': pricePair(90150, 84515),
+      '14 吋|M5 Pro|m5pro-18-20|標準玻璃': pricePair(92400, 87240),
+      '14 吋|M5 Pro|m5pro-18-20|奈米紋理玻璃': pricePair(97650, 91965),
+      '14 吋|M5 Max|m5max-18-32|標準玻璃': pricePair(139900, 129690),
+      '14 吋|M5 Max|m5max-18-32|奈米紋理玻璃': pricePair(145150, 134415),
+      '14 吋|M5 Max|m5max-18-40|標準玻璃': pricePair(160900, 148590),
+      '14 吋|M5 Max|m5max-18-40|奈米紋理玻璃': pricePair(166150, 153315),
+      '16 吋|M5 Pro|m5pro-18-20|標準玻璃': pricePair(99900, 93190),
+      '16 吋|M5 Pro|m5pro-18-20|奈米紋理玻璃': pricePair(105150, 97915),
+      '16 吋|M5 Max|m5max-18-32|標準玻璃': pricePair(144900, 134990),
+      '16 吋|M5 Max|m5max-18-32|奈米紋理玻璃': pricePair(150150, 139715),
+      '16 吋|M5 Max|m5max-18-40|標準玻璃': pricePair(169900, 159990),
+      '16 吋|M5 Max|m5max-18-40|奈米紋理玻璃': pricePair(175150, 164715)
+    };
+
+    products.push({
+      id: 'macbook-pro',
+      category: 'Mac',
+      name: 'MacBook Pro',
+      search: 'M5 M5 Pro M5 Max 專業筆電',
+      partNumbers: knownPartNumbers(macProPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'size', label: '尺寸', options: choices(['14 吋', '16 吋']) },
+        { key: 'chip', label: '晶片', options: function (state) { return state.size === '16 吋' ? choices(['M5 Pro', 'M5 Max']) : choices(['M5', 'M5 Pro', 'M5 Max']); } },
+        { key: 'cores', label: '核心配置', options: function (state) { return choices((macProCoreOptions[state.size + '|' + state.chip] || ['m5-10-10']).map((value) => [value, macProCoreLabels[value]])); } },
+        { key: 'memory', label: '記憶體', options: function (state) { const profile = macProProfiles[state.size + '|' + state.chip] || macProProfiles['14 吋|M5']; return choices(profile.memoryOptions); } },
+        { key: 'storage', label: '儲存空間', options: function (state) { const profile = macProProfiles[state.size + '|' + state.chip] || macProProfiles['14 吋|M5']; return choices(profile.storageOptions); } },
+        { key: 'finish', label: '顯示器玻璃', options: choices(['標準玻璃', '奈米紋理玻璃']) },
+        { key: 'color', label: '顏色', options: choices(['太空黑色', '銀色']) },
+        { key: 'keyboard', label: '鍵盤語言', options: choices(['中文／注音', '英文（美國）', '日文']) },
+        { key: 'adapter', label: '電源轉接器', options: function (state) { return choices(state.size === '16 吋' ? ['140W USB-C 電源轉接器', '96W USB-C 電源轉接器'] : (state.chip === 'M5' ? ['70W USB-C 電源轉接器', '96W USB-C 電源轉接器'] : ['96W USB-C 電源轉接器', '70W USB-C 電源轉接器'])); } }
+      ],
+      defaults: { size: '14 吋', chip: 'M5', cores: 'm5-10-10', memory: '16GB', storage: '512GB', finish: '標準玻璃', color: '太空黑色', keyboard: '中文／注音', adapter: '70W USB-C 電源轉接器' },
+      getVariant: function (state) {
+        const key = state.size + '|' + state.chip;
+        const profile = macProProfiles[key] || macProProfiles['14 吋|M5'];
+        const core = state.cores || (macProCoreOptions[key] || ['m5-10-10'])[0];
+        const base = macProOfficialBasePrices[state.size + '|' + state.chip + '|' + core + '|' + state.finish] || pricePair(profile.retail, profile.education);
+        const pricedProfile = Object.assign({}, profile, { retail: base[0], education: base[1] });
+        const codeKey = state.size + '|' + state.chip + '|' + core + '|' + state.finish + '|' + state.color;
+        const preconfiguredMemory = state.size === '14 吋' && state.chip === 'M5' ? '16GB' : (state.chip === 'M5 Max' ? '36GB' : '24GB');
+        const preconfiguredStorage = state.chip === 'M5' ? '512GB' : (state.chip === 'M5 Pro' ? '1TB' : '2TB');
+        const preconfiguredAdapter = state.size === '16 吋' ? '140W USB-C 電源轉接器' : (state.chip === 'M5' ? '70W USB-C 電源轉接器' : '96W USB-C 電源轉接器');
+        const isPreconfigured = state.memory === preconfiguredMemory && state.storage === preconfiguredStorage && state.keyboard === '中文／注音' && state.adapter === preconfiguredAdapter;
+        return variantResult(priceFromProfile(pricedProfile, state, state.size + '｜' + state.chip + '｜' + macProCoreLabels[core] + '｜' + state.memory + '｜' + state.storage + '｜' + state.finish + '｜' + state.color + '｜' + state.keyboard), isPreconfigured ? macProPartNumbers[codeKey] : null);
+      }
+    });
+
+    const imacProfiles = {
+      '8 核心 CPU／8 核心 GPU': { retail: 49900, education: 48190, memoryPrices: { '16GB': 0, '24GB': 7000 }, storagePrices: { '256GB': 0, '512GB': 7000, '1TB': 14000, '2TB': 21000 } },
+      '10 核心 CPU／10 核心 GPU': { retail: 57900, education: 54490, memoryPrices: { '16GB': 0, '24GB': 7000 }, storagePrices: { '256GB': 0, '512GB': 7000, '1TB': 14000, '2TB': 21000 } }
+    };
+
+    products.push({
+      id: 'imac',
+      category: 'Mac',
+      name: 'iMac',
+      search: '24 吋 M4 一體式桌機',
+      partNumbers: knownPartNumbers(iMacPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'gpu', label: '晶片／GPU', options: choices(optionValues(imacProfiles)) },
+        { key: 'memory', label: '記憶體', options: function () { return choices(['16GB', '24GB']); } },
+        { key: 'storage', label: '儲存空間', options: function () { return choices(['256GB', '512GB', '1TB', '2TB']); } },
+        { key: 'color', label: '顏色', options: choices(['藍色', '綠色', '粉紅色', '銀色']) }
+      ],
+      defaults: { gpu: '8 核心 CPU／8 核心 GPU', memory: '16GB', storage: '256GB', color: '藍色' },
+      getVariant: function (state) {
+        const profile = imacProfiles[state.gpu] || imacProfiles['8 核心 CPU／8 核心 GPU'];
+        const core = state.gpu.indexOf('8 核心') === 0 ? '8-8' : '10-10';
+        const isPreconfigured = state.memory === '16GB' && state.storage === '256GB';
+        return variantResult(priceFromProfile(profile, state, '24 吋｜M4｜' + state.gpu + '｜' + state.memory + '｜' + state.storage + '｜' + state.color), isPreconfigured ? iMacPartNumbers[core + '|' + state.color] : null);
+      }
+    });
+
+    const macMiniProfiles = {
+      'M6': { retail: 29900, education: 26590, memoryOptions: ['16GB', '24GB', '32GB'], memoryPrices: { '16GB': 0, '24GB': 7000, '32GB': 14000 }, storageOptions: ['256GB', '512GB', '1TB', '2TB'], storagePrices: { '256GB': 0, '512GB': 7000, '1TB': 21000, '2TB': 35000 } },
+      'M5 Pro': { retail: 59900, education: 56390, memoryOptions: ['24GB', '48GB', '64GB'], memoryPrices: { '24GB': 0, '48GB': 14000, '64GB': 21000 }, storageOptions: ['512GB', '1TB', '2TB'], storagePrices: { '512GB': 0, '1TB': 17500, '2TB': 35000 } }
+    };
+
+    const macMiniCoreOptions = {
+      M6: [['m6-12-12', '12 核心 CPU／12 核心 GPU']],
+      'M5 Pro': [['m5pro-15-16', '15 核心 CPU／16 核心 GPU'], ['m5pro-18-20', '18 核心 CPU／20 核心 GPU']]
+    };
+
+    products.push({
+      id: 'mac-mini',
+      category: 'Mac',
+      name: 'Mac mini',
+      search: '桌上型主機 M6 M5 Pro',
+      partNumbers: knownPartNumbers(macMiniPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'chip', label: '晶片', options: choices(optionValues(macMiniProfiles)) },
+        { key: 'cores', label: '核心配置', options: function (state) { return choices(macMiniCoreOptions[state.chip] || macMiniCoreOptions.M6); } },
+        { key: 'memory', label: '記憶體', options: function (state) { const profile = macMiniProfiles[state.chip] || macMiniProfiles.M6; return choices(profile.memoryOptions); } },
+        { key: 'storage', label: '儲存空間', options: function (state) { const profile = macMiniProfiles[state.chip] || macMiniProfiles.M6; return choices(profile.storageOptions); } }
+      ],
+      defaults: { chip: 'M6', cores: 'm6-12-12', memory: '16GB', storage: '256GB' },
+      getVariant: function (state) {
+        const profile = macMiniProfiles[state.chip] || macMiniProfiles.M6;
+        const core = state.cores || 'm6-12-12';
+        const base = state.chip === 'M5 Pro' && core === 'm5pro-18-20' ? pricePair(66900, 62690) : pricePair(profile.retail, profile.education);
+        const pricedProfile = Object.assign({}, profile, { retail: base[0], education: base[1] });
+        const isPreconfigured = (state.chip === 'M6' && core === 'm6-12-12' && state.memory === '16GB' && state.storage === '256GB') || (state.chip === 'M5 Pro' && core === 'm5pro-15-16' && state.memory === '24GB' && state.storage === '512GB');
+        return variantResult(priceFromProfile(pricedProfile, state, state.chip + '｜' + (core === 'm6-12-12' ? '12 核心 CPU／12 核心 GPU' : macMiniCoreOptions['M5 Pro'].find((option) => option[0] === core)[1]) + '｜' + state.memory + '｜' + state.storage), isPreconfigured ? macMiniPartNumbers[state.chip + '|' + core] : null);
+      }
+    });
+
+    const macStudioProfiles = {
+      'M5 Max': { retail: 84900, education: 78090, memoryOptions: ['36GB', '48GB', '64GB', '128GB'], memoryPrices: { '36GB': 0, '48GB': 14000, '64GB': 21000, '128GB': 56000 }, storageOptions: ['512GB', '1TB', '2TB', '4TB'], storagePrices: { '512GB': 0, '1TB': 7000, '2TB': 21000, '4TB': 42000 } },
+      'M5 Ultra': { retail: 199900, education: 185390, memoryOptions: ['96GB', '128GB', '192GB'], memoryPrices: { '96GB': 0, '128GB': 28000, '192GB': 70000 }, storageOptions: ['1TB', '2TB', '4TB', '8TB'], storagePrices: { '1TB': 0, '2TB': 14000, '4TB': 35000, '8TB': 70000 } }
+    };
+
+    const macStudioCoreOptions = {
+      'M5 Max': [['m5max-18-32', '18 核心 CPU／32 核心 GPU'], ['m5max-18-40', '18 核心 CPU／40 核心 GPU']],
+      'M5 Ultra': [['m5ultra-30-64', '30 核心 CPU／64 核心 GPU'], ['m5ultra-36-80', '36 核心 CPU／80 核心 GPU']]
+    };
+
+    products.push({
+      id: 'mac-studio',
+      category: 'Mac',
+      name: 'Mac Studio',
+      search: '專業桌機 M5 Max M5 Ultra',
+      partNumbers: knownPartNumbers(macStudioPartNumbers),
+      eduUrl: categoryLinks.Mac.edu,
+      retailUrl: categoryLinks.Mac.retail,
+      controls: [
+        { key: 'chip', label: '晶片', options: choices(optionValues(macStudioProfiles)) },
+        { key: 'cores', label: '核心配置', options: function (state) { return choices(macStudioCoreOptions[state.chip] || macStudioCoreOptions['M5 Max']); } },
+        { key: 'memory', label: '記憶體', options: function (state) { const profile = macStudioProfiles[state.chip] || macStudioProfiles['M5 Max']; return choices(profile.memoryOptions); } },
+        { key: 'storage', label: '儲存空間', options: function (state) { const profile = macStudioProfiles[state.chip] || macStudioProfiles['M5 Max']; return choices(profile.storageOptions); } }
+      ],
+      defaults: { chip: 'M5 Max', cores: 'm5max-18-32', memory: '36GB', storage: '512GB' },
+      getVariant: function (state) {
+        const profile = macStudioProfiles[state.chip] || macStudioProfiles['M5 Max'];
+        const core = state.cores || 'm5max-18-32';
+        const base = core === 'm5max-18-40' ? pricePair(105900, 96990) : (core === 'm5ultra-36-80' ? pricePair(245400, 226340) : pricePair(profile.retail, profile.education));
+        const pricedProfile = Object.assign({}, profile, { retail: base[0], education: base[1] });
+        const isPreconfigured = (state.chip === 'M5 Max' && core === 'm5max-18-32' && state.memory === '36GB' && state.storage === '512GB') || (state.chip === 'M5 Ultra' && core === 'm5ultra-30-64' && state.memory === '96GB' && state.storage === '1TB');
+        return variantResult(priceFromProfile(pricedProfile, state, state.chip + '｜' + (macStudioCoreOptions[state.chip] || []).find((option) => option[0] === core)?.[1] + '｜' + state.memory + '｜' + state.storage), isPreconfigured ? macStudioPartNumbers[state.chip + '|' + core] : null);
+      }
+    });
+
+    function makeIpadStorageProduct(config) {
+      const controls = [];
+      if (config.sizes) controls.push({ key: 'size', label: '尺寸', options: choices(config.sizes) });
+      if (config.colors) controls.push({ key: 'color', label: '顏色', options: choices(config.colors) });
+      controls.push({ key: 'connectivity', label: '連線', options: choices(['Wi-Fi', 'Wi-Fi + 行動網路']) });
+      controls.push({ key: 'storage', label: '容量', options: function () { return choices(config.storage); } });
+      return {
+        id: config.id,
+        category: 'iPad',
+        name: config.name,
+        search: config.search || '',
+        partNumbers: knownPartNumbers(config.partNumbers),
+        eduUrl: config.eduUrl || categoryLinks.iPad.edu,
+        retailUrl: config.retailUrl || categoryLinks.iPad.retail,
+        controls: controls,
+        defaults: config.defaults,
+        getVariant: function (state) {
+          const size = config.sizes ? state.size : config.size;
+          const key = size + '|' + state.connectivity + '|' + state.storage;
+          const pair = config.prices[key] || [0, 0];
+          const partKey = (config.sizes ? [size] : []).concat(config.colors ? [state.color] : [], [state.connectivity, state.storage]).join('|');
+          return variantResult({
+            retail: pair[0],
+            education: pair[1],
+            detail: size + '｜' + config.chip + '｜' + (state.color ? state.color + '｜' : '') + state.storage + '｜' + state.connectivity
+          }, config.partNumbers ? config.partNumbers[partKey] : null);
+        }
+      };
+    }
+
+    const ipadPrices = {};
+    function registerIpadPrices(size, connectivity, prices) {
+      ['128GB', '256GB', '512GB'].forEach(function (storage, index) {
+        ipadPrices[size + '|' + connectivity + '|' + storage] = pricePair(prices[index][0], prices[index][1]);
+      });
+    }
+    registerIpadPrices('11 吋', 'Wi-Fi', [[14900, 14200], [18400, 17700], [25400, 24700]]);
+    registerIpadPrices('11 吋', 'Wi-Fi + 行動網路', [[19900, 19200], [23400, 22700], [30400, 29700]]);
+
+    products.push(makeIpadStorageProduct({
+      id: 'ipad',
+      name: 'iPad',
+      search: '11 吋 A16',
+      size: '11 吋',
+      chip: 'A16',
+      storage: ['128GB', '256GB', '512GB'],
+      colors: ['藍色', '銀色', '粉紅色', '黃色'],
+      partNumbers: ipadPartNumbers,
+      prices: ipadPrices,
+      defaults: { color: '藍色', connectivity: 'Wi-Fi', storage: '128GB' }
+    }));
+
+    const ipadMiniPrices = {};
+    function registerMiniPrices(connectivity, prices) {
+      ['128GB', '256GB', '512GB'].forEach(function (storage, index) {
+        ipadMiniPrices['8.3 吋|' + connectivity + '|' + storage] = pricePair(prices[index][0], prices[index][1]);
+      });
+    }
+    registerMiniPrices('Wi-Fi', [[19900, 18200], [23400, 21700], [30400, 28700]]);
+    registerMiniPrices('Wi-Fi + 行動網路', [[24900, 23200], [28400, 26700], [35400, 33700]]);
+
+    products.push(makeIpadStorageProduct({
+      id: 'ipad-mini',
+      name: 'iPad mini',
+      search: '8.3 吋 A17 Pro',
+      size: '8.3 吋',
+      chip: 'A17 Pro',
+      storage: ['128GB', '256GB', '512GB'],
+      colors: ['紫色', '星光色', '太空灰色', '藍色'],
+      partNumbers: ipadMiniPartNumbers,
+      prices: ipadMiniPrices,
+      defaults: { color: '紫色', connectivity: 'Wi-Fi', storage: '128GB' }
+    }));
+
+    const ipadAirPrices = {};
+    function registerAirPrices(size, connectivity, prices) {
+      ['128GB', '256GB', '512GB', '1TB'].forEach(function (storage, index) {
+        ipadAirPrices[size + '|' + connectivity + '|' + storage] = pricePair(prices[index][0], prices[index][1]);
+      });
+    }
+    registerAirPrices('11 吋', 'Wi-Fi', [[24900, 23200], [28400, 26700], [35400, 33700], [45900, 44200]]);
+    registerAirPrices('11 吋', 'Wi-Fi + 行動網路', [[29900, 28200], [33400, 31700], [40400, 38700], [50900, 49200]]);
+    registerAirPrices('13 吋', 'Wi-Fi', [[31900, 30200], [35400, 33700], [42400, 40700], [52900, 51200]]);
+    registerAirPrices('13 吋', 'Wi-Fi + 行動網路', [[36900, 35200], [40400, 38700], [47400, 45700], [57900, 56200]]);
+
+    products.push(makeIpadStorageProduct({
+      id: 'ipad-air',
+      name: 'iPad Air',
+      search: 'M4 平板',
+      sizes: ['11 吋', '13 吋'],
+      chip: 'M4',
+      storage: ['128GB', '256GB', '512GB', '1TB'],
+      colors: ['太空灰色', '星光色', '紫色', '藍色'],
+      partNumbers: ipadAirPartNumbers,
+      prices: ipadAirPrices,
+      defaults: { size: '11 吋', color: '太空灰色', connectivity: 'Wi-Fi', storage: '128GB' }
+    }));
+
+    const ipadProPrices = {};
+    function registerProPrices(size, glass, connectivity, prices) {
+      Object.keys(prices).forEach(function (storage) {
+        ipadProPrices[size + '|' + glass + '|' + connectivity + '|' + storage] = pricePair(prices[storage][0], prices[storage][1]);
+      });
+    }
+    registerProPrices('11 吋', '標準玻璃', 'Wi-Fi', { '256GB': [39900, 36600], '512GB': [46900, 43600], '1TB': [60900, 57600], '2TB': [78400, 75100] });
+    registerProPrices('11 吋', '標準玻璃', 'Wi-Fi + 行動網路', { '256GB': [46900, 43600], '512GB': [53900, 50600], '1TB': [67900, 64600], '2TB': [85400, 82100] });
+    registerProPrices('11 吋', '奈米紋理玻璃', 'Wi-Fi', { '1TB': [64400, 61100], '2TB': [81900, 78600] });
+    registerProPrices('11 吋', '奈米紋理玻璃', 'Wi-Fi + 行動網路', { '1TB': [71400, 68100], '2TB': [88900, 85600] });
+    registerProPrices('13 吋', '標準玻璃', 'Wi-Fi', { '256GB': [50900, 47500], '512GB': [57900, 54500], '1TB': [71900, 68500], '2TB': [89400, 86000] });
+    registerProPrices('13 吋', '標準玻璃', 'Wi-Fi + 行動網路', { '256GB': [57900, 54500], '512GB': [64900, 61500], '1TB': [78900, 75500], '2TB': [96400, 93000] });
+    registerProPrices('13 吋', '奈米紋理玻璃', 'Wi-Fi', { '1TB': [75400, 72000], '2TB': [92900, 89500] });
+    registerProPrices('13 吋', '奈米紋理玻璃', 'Wi-Fi + 行動網路', { '1TB': [82400, 79000], '2TB': [99900, 96500] });
+
+    products.push({
+      id: 'ipad-pro',
+      category: 'iPad',
+      name: 'iPad Pro',
+      search: 'M5 專業平板',
+      partNumbers: knownPartNumbers(ipadProPartNumbers),
+      eduUrl: categoryLinks.iPad.edu,
+      retailUrl: categoryLinks.iPad.retail,
+      controls: [
+        { key: 'size', label: '尺寸', options: choices(['11 吋', '13 吋']) },
+        { key: 'glass', label: '玻璃', options: choices(['標準玻璃', '奈米紋理玻璃']) },
+        { key: 'color', label: '顏色', options: choices(['太空黑色', '銀色']) },
+        { key: 'connectivity', label: '連線', options: choices(['Wi-Fi', 'Wi-Fi + 行動網路']) },
+        { key: 'storage', label: '容量', options: function (state) { return choices(state.glass === '奈米紋理玻璃' ? ['1TB', '2TB'] : ['256GB', '512GB', '1TB', '2TB']); } }
+      ],
+      defaults: { size: '11 吋', glass: '標準玻璃', color: '太空黑色', connectivity: 'Wi-Fi', storage: '256GB' },
+      getVariant: function (state) {
+        const glass = state.glass || '標準玻璃';
+        const key = state.size + '|' + glass + '|' + state.connectivity + '|' + state.storage;
+        const pair = ipadProPrices[key] || [0, 0];
+        const partKey = state.size + '|' + glass + '|' + state.connectivity + '|' + state.color + '|' + state.storage;
+        return variantResult({ retail: pair[0], education: pair[1], detail: state.size + '｜M5｜' + glass + '｜' + state.color + '｜' + state.storage + '｜' + state.connectivity }, ipadProPartNumbers[partKey]);
+      }
+    });
+
+    const watchSePartNumbers = {
+      '40 公釐|鋁金屬|午夜色|GPS': 'MEHX4TA/A',
+      '40 公釐|鋁金屬|午夜色|GPS + 行動網路': 'MEQ24TA/A',
+      '44 公釐|鋁金屬|午夜色|GPS + 行動網路': 'MEQ44TA/A',
+      '40 公釐|鋁金屬|星光色|GPS + 行動網路': 'MEQ14TA/A',
+      '40 公釐|鋁金屬|星光色|GPS': 'MEHV4TA/A',
+      '44 公釐|鋁金屬|午夜色|GPS': 'MEP34TA/A',
+      '44 公釐|鋁金屬|星光色|GPS': 'MEP04TA/A',
+      '44 公釐|鋁金屬|星光色|GPS + 行動網路': 'MEQ34TA/A'
+    };
+
+    const watchSeriesPartNumbers = {
+      '46 公釐|鋁金屬|太空灰色|GPS + 行動網路': 'MJJH4TA/A',
+      '42 公釐|鋁金屬|太空灰色|GPS': 'MJFN4TA/A',
+      '42 公釐|鈦金屬|原色|GPS + 行動網路': 'MJJM4TA/A',
+      '46 公釐|鋁金屬|黑色|GPS + 行動網路': 'MJJJ4TA/A',
+      '46 公釐|精密陶瓷|夜藍色|GPS + 行動網路': 'MJJW4TA/A',
+      '46 公釐|鋁金屬|深古銅色|GPS + 行動網路': 'MJJL4TA/A',
+      '46 公釐|鋁金屬|深古銅色|GPS': 'MJFW4TA/A',
+      '46 公釐|鋁金屬|黑色|GPS': 'MJFU4TA/A',
+      '46 公釐|精密陶瓷|珍珠白色|GPS + 行動網路': 'MJJV4TA/A',
+      '46 公釐|鋁金屬|淺金色|GPS + 行動網路': 'MJJK4TA/A',
+      '42 公釐|鈦金屬|燦金色|GPS + 行動網路': 'MJJN4TA/A',
+      '46 公釐|鈦金屬|燦金色|GPS + 行動網路': 'MJJQ4TA/A',
+      '46 公釐|鈦金屬|原色|GPS + 行動網路': 'MJJP4TA/A',
+      '46 公釐|鋁金屬|太空灰色|GPS': 'MJFT4TA/A',
+      '42 公釐|鋁金屬|黑色|GPS + 行動網路': 'MJJE4TA/A',
+      '42 公釐|鋁金屬|太空灰色|GPS + 行動網路': 'MJJD4TA/A',
+      '42 公釐|鋁金屬|深古銅色|GPS': 'MJFR4TA/A',
+      '42 公釐|精密陶瓷|夜藍色|GPS + 行動網路': 'MJJU4TA/A',
+      '42 公釐|鋁金屬|黑色|GPS': 'MJFP4TA/A',
+      '42 公釐|精密陶瓷|珍珠白色|GPS + 行動網路': 'MJJT4TA/A',
+      '42 公釐|鋁金屬|淺金色|GPS + 行動網路': 'MJJF4TA/A',
+      '46 公釐|鋁金屬|淺金色|GPS': 'MJFV4TA/A',
+      '42 公釐|鋁金屬|深古銅色|GPS + 行動網路': 'MJJG4TA/A',
+      '42 公釐|鋁金屬|淺金色|GPS': 'MJFQ4TA/A'
+    };
+
+    const watchUltraPartNumbers = {
+      '49 公釐|鈦金屬|原色|GPS + 行動網路': 'MJCR4TA/A',
+      '49 公釐|鈦金屬|黑色|GPS + 行動網路': 'MJCT4TA/A'
+    };
+
+    function makeWatchProduct(config) {
+      return {
+        id: config.id,
+        category: 'Watch',
+        name: config.name,
+        search: config.search || '',
+        partNumbers: knownPartNumbers(config.partNumbers),
+        eduUrl: categoryLinks.Watch.edu,
+        retailUrl: categoryLinks.Watch.retail,
+        controls: [
+          { key: 'size', label: '錶殼尺寸', options: choices(config.sizes) },
+          { key: 'material', label: '錶殼材質', options: choices(config.materials) },
+          { key: 'color', label: '顏色', options: function (state) { return choices(config.colorsByMaterial[state.material] || []); } },
+          { key: 'connectivity', label: '連線', options: function (state) { return choices(config.connectivityByMaterial[state.material] || ['GPS', 'GPS + 行動網路']); } }
+        ],
+        defaults: { size: config.sizes[0], material: config.materials[0][0], color: config.defaults.color, connectivity: config.defaults.connectivity },
+        getVariant: function (state) {
+          const pair = config.prices[state.size + '|' + state.material + '|' + state.connectivity] || [0, 0];
+          const partKey = state.size + '|' + state.material + '|' + state.color + '|' + state.connectivity;
+          return variantResult({ retail: pair[0], education: pair[1], detail: state.size + '｜' + state.material + '｜' + state.color + '｜' + state.connectivity }, config.partNumbers[partKey]);
+        }
+      };
+    }
+
+    products.push(makeWatchProduct({
+      id: 'watch-se3',
+      name: 'Apple Watch SE 3',
+      search: 'SE 3 鋁金屬',
+      sizes: ['40 公釐', '44 公釐'],
+      materials: [['鋁金屬', '鋁金屬']],
+      colorsByMaterial: { '鋁金屬': ['午夜色', '星光色'] },
+      connectivityByMaterial: { '鋁金屬': ['GPS', 'GPS + 行動網路'] },
+      defaults: { color: '午夜色', connectivity: 'GPS' },
+      prices: {
+        '40 公釐|鋁金屬|GPS': [7900, 7300],
+        '40 公釐|鋁金屬|GPS + 行動網路': [9400, 8400],
+        '44 公釐|鋁金屬|GPS': [8900, 8300],
+        '44 公釐|鋁金屬|GPS + 行動網路': [10400, 9400]
+      },
+      partNumbers: watchSePartNumbers
+    }));
+
+    products.push(makeWatchProduct({
+      id: 'watch-series12',
+      name: 'Apple Watch Series 12',
+      search: 'Series 12 鋁金屬',
+      sizes: ['42 公釐', '46 公釐'],
+      materials: [['鋁金屬', '鋁金屬'], ['鈦金屬', '鈦金屬'], ['精密陶瓷', '精密陶瓷']],
+      colorsByMaterial: {
+        '鋁金屬': ['深古銅色', '淺金色', '黑色', '太空灰色'],
+        '鈦金屬': ['燦金色', '原色'],
+        '精密陶瓷': ['珍珠白色', '夜藍色']
+      },
+      connectivityByMaterial: {
+        '鋁金屬': ['GPS', 'GPS + 行動網路'],
+        '鈦金屬': ['GPS + 行動網路'],
+        '精密陶瓷': ['GPS + 行動網路']
+      },
+      defaults: { color: '深古銅色', connectivity: 'GPS' },
+      prices: {
+        '42 公釐|鋁金屬|GPS': [13900, 12500],
+        '42 公釐|鋁金屬|GPS + 行動網路': [16900, 15300],
+        '46 公釐|鋁金屬|GPS': [15400, 14000],
+        '46 公釐|鋁金屬|GPS + 行動網路': [18400, 16800],
+        '42 公釐|鈦金屬|GPS + 行動網路': [24900, 22400],
+        '46 公釐|鈦金屬|GPS + 行動網路': [26400, 23900],
+        '42 公釐|精密陶瓷|GPS + 行動網路': [32900, 29600],
+        '46 公釐|精密陶瓷|GPS + 行動網路': [34400, 31100]
+      },
+      partNumbers: watchSeriesPartNumbers
+    }));
+
+    products.push({
+      id: 'watch-ultra4',
+      category: 'Watch',
+      name: 'Apple Watch Ultra 4',
+      search: 'Ultra 4 49 公釐 鈦金屬 行動網路',
+      eduUrl: categoryLinks.Watch.edu,
+      retailUrl: categoryLinks.Watch.retail,
+      controls: [
+        { key: 'size', label: '錶殼尺寸', options: choices([['49 公釐', '49 公釐']]) },
+        { key: 'material', label: '錶殼材質', options: choices([['鈦金屬', '鈦金屬']]) },
+        { key: 'color', label: '顏色', options: choices(['原色', '黑色']) },
+        { key: 'connectivity', label: '連線', options: choices([['GPS + 行動網路', 'GPS + 行動網路']]) }
+      ],
+      defaults: { size: '49 公釐', material: '鈦金屬', color: '原色', connectivity: 'GPS + 行動網路' },
+      partNumbers: knownPartNumbers(watchUltraPartNumbers),
+      getVariant: function (state) {
+        return variantResult({ retail: 27900, education: 25000, detail: state.size + '｜' + state.material + '｜' + state.color + '｜' + state.connectivity }, watchUltraPartNumbers[state.size + '|' + state.material + '|' + state.color + '|' + state.connectivity]);
+      }
+    });
+
+    products.push(staticProduct({
+      id: 'pencil-pro',
+      category: 'Pencil',
+      name: 'Apple Pencil Pro',
+      search: '低延遲 書寫 創作',
+      detail: 'Apple Pencil Pro｜低延遲書寫與創作',
+      partNumber: 'MX2D3TA/A',
+      retail: 4390,
+      education: 4000
+    }));
+    products.push(staticProduct({
+      id: 'pencil-2',
+      category: 'Pencil',
+      name: 'Apple Pencil 第 2 代',
+      search: '磁吸配對 舊款 iPad',
+      detail: 'Apple Pencil 第 2 代｜磁吸配對與充電',
+      partNumber: 'MXN43TA/A',
+      retail: 4390,
+      education: 4000
+    }));
+    products.push(staticProduct({
+      id: 'pencil-usbc',
+      category: 'Pencil',
+      name: 'Apple Pencil USB-C',
+      search: 'USB-C 筆記 PDF 標註',
+      detail: 'Apple Pencil USB-C｜USB-C 充電與一般書寫',
+      partNumber: 'MUWA3TA/A',
+      retail: 2690,
+      education: 2340
+    }));
+    products.push(staticProduct({
+      id: 'pencil-1',
+      category: 'Pencil',
+      name: 'Apple Pencil 第 1 代',
+      search: 'Lightning 舊款 iPad',
+      detail: 'Apple Pencil 第 1 代｜Lightning 充電',
+      partNumber: 'MYQW3TA/A',
+      retail: 3290,
+      education: 2920
+    }));
+
+    function makeKeyboardProduct(config) {
+      const colors = config.colors || ['黑色', '白色'];
+      const partNumbers = config.partNumbers || {};
+      const controls = [
+        { key: 'language', label: '鍵盤語言', options: choices(['中文／注音', '英文（美國）', '日文']) }
+      ];
+      if (config.colors) controls.push({ key: 'color', label: '顏色', options: choices(colors) });
+      return staticProduct(Object.assign({}, config, {
+        partNumbers: knownPartNumbers(partNumbers),
+        controls: controls,
+        defaults: { language: '中文／注音', color: config.defaultColor || colors[0] },
+        variant: function (state) {
+          const key = config.colors ? state.language + '|' + state.color : state.language;
+          return {
+            retail: config.retail,
+            education: config.education,
+            detail: config.detail + '｜' + state.language + (config.colors ? '｜' + state.color : ''),
+            partNumber: partNumbers[key]
+          };
+        }
+      }));
+    }
+
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-ipad-pro-11',
+      category: 'Keyboard',
+      name: 'Magic Keyboard for iPad Pro 11 吋',
+      search: 'iPad Pro 11 吋 M5 鍵盤 觸控板',
+      detail: 'iPad Pro 11 吋（M5）｜背光鍵盤與觸控板',
+      colors: ['黑色', '白色'],
+      defaultColor: '黑色',
+      partNumbers: { '中文／注音|黑色': 'MWR23TA/A' },
+      retail: 9890,
+      education: 9200
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-ipad-pro-13',
+      category: 'Keyboard',
+      name: 'Magic Keyboard for iPad Pro 13 吋',
+      search: 'iPad Pro 13 吋 M5 鍵盤 觸控板',
+      detail: 'iPad Pro 13 吋（M5）｜背光鍵盤與觸控板',
+      colors: ['黑色', '白色'],
+      defaultColor: '黑色',
+      retail: 11690,
+      education: 11000
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-ipad-air-11',
+      category: 'Keyboard',
+      name: 'Magic Keyboard for iPad Air 11 吋',
+      search: 'iPad Air 11 吋 M4 鍵盤 觸控板',
+      detail: 'iPad Air 11 吋（M4）｜背光鍵盤與觸控板',
+      colors: ['白色', '黑色'],
+      defaultColor: '白色',
+      partNumbers: { '中文／注音|白色': 'MDFV4TA/A' },
+      retail: 9490,
+      education: 8800
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-ipad-air-13',
+      category: 'Keyboard',
+      name: 'Magic Keyboard for iPad Air 13 吋',
+      search: 'iPad Air 13 吋 M4 鍵盤 觸控板',
+      detail: 'iPad Air 13 吋（M4）｜背光鍵盤與觸控板',
+      colors: ['白色', '黑色'],
+      defaultColor: '白色',
+      retail: 9890,
+      education: 9300
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-ipad-a16',
+      category: 'Keyboard',
+      name: 'Magic Keyboard Folio for iPad',
+      search: 'iPad A16 鍵盤 保護',
+      detail: 'iPad（A16）｜鍵盤與支架',
+      partNumbers: { '中文／注音': 'MQDP3TA/A' },
+      retail: 8790,
+      education: 8079
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-usbc',
+      category: 'Keyboard',
+      name: 'Magic Keyboard USB-C',
+      search: 'Mac iPad iPhone 無線鍵盤',
+      detail: 'Mac／iPad／iPhone｜無線鍵盤與 USB-C 充電',
+      colors: ['白色', '黑色'],
+      defaultColor: '白色',
+      retail: 2990,
+      education: 2990
+    }));
+    products.push(makeKeyboardProduct({
+      id: 'keyboard-touchid-numeric',
+      category: 'Keyboard',
+      name: 'Magic Keyboard＋Touch ID＋數字鍵盤',
+      search: 'Mac Touch ID 數字鍵盤',
+      detail: '配備 Apple 晶片的 Mac｜Touch ID 與數字鍵盤',
+      colors: ['白色', '黑色'],
+      defaultColor: '白色',
+      retail: 5890,
+      education: 5890
+    }));
+
+    const selectionState = Object.create(null);
+    const searchInput = document.querySelector('#searchInput');
+    const categoryButtons = Array.from(document.querySelectorAll('.category-button'));
+    const resetButton = document.querySelector('#resetButton');
+    const productList = document.querySelector('#productList');
+    const resultCount = document.querySelector('#resultCount');
+    let activeCategory = '全部';
+    let expandedProductId = null;
+
+    const formatMoney = (value) => 'NT$' + Number(value).toLocaleString('zh-TW');
+    const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+
+    function getControlOptions(product, control, state) {
+      const values = typeof control.options === 'function' ? control.options(state) : control.options;
+      return values || [];
+    }
+
+    function getSelectedState(product) {
+      const saved = selectionState[product.id] || {};
+      const state = {};
+      product.controls.forEach((control) => {
+        const options = getControlOptions(product, control, state);
+        const preferred = saved[control.key] || product.defaults[control.key];
+        const isValid = options.some((option) => option.value === String(preferred));
+        state[control.key] = isValid ? String(preferred) : (options[0] ? options[0].value : '');
+      });
+      return state;
+    }
+
+    function getVariant(product, state) {
+      const variant = product.getVariant(state);
+      return Object.assign({}, variant, {
+        configuration: variant.configuration || variant.detail,
+        retailUrl: product.retailUrl,
+        educationUrl: product.eduUrl
+      });
+    }
+
+    function renderControls(product, state, variant) {
+      if (!product.controls.length) return '<span class="config-static">' + escapeHtml(variant.detail) + '</span>';
+      const fields = product.controls.map((control) => {
+        const options = getControlOptions(product, control, state);
+        const optionHtml = options.map((option) => '<option value="' + escapeHtml(option.value) + '"' + (option.value === state[control.key] ? ' selected' : '') + '>' + escapeHtml(option.label) + '</option>').join('');
+        return '<label class="config-field config-field--' + escapeHtml(control.key) + '"><span>' + escapeHtml(control.label) + '</span><select data-product-id="' + escapeHtml(product.id) + '" data-key="' + escapeHtml(control.key) + '">' + optionHtml + '</select></label>';
+      }).join('');
+      return '<div class="config-grid">' + fields + '</div><span class="variant-line">' + escapeHtml(variant.detail) + '</span>';
+    }
+
+    function render() {
+      const query = searchInput.value.trim().toLowerCase();
+      const category = activeCategory;
+      const visible = products.filter((product) => {
+        const state = getSelectedState(product);
+        const variant = getVariant(product, state);
+        const optionText = product.controls.map((control) => getControlOptions(product, control, state).map((option) => option.label).join(' ')).join(' ');
+        const searchable = [product.category, product.name, product.search, variant.detail, variant.partNumber, (product.partNumbers || []).join(' '), optionText].join(' ').toLowerCase();
+        return (!query || searchable.includes(query)) && (category === '全部' || product.category === category);
+      });
+
+      resultCount.innerHTML = '顯示 <strong>' + visible.length + '</strong> 款產品';
+
+      if (!visible.length) {
+        expandedProductId = null;
+        productList.innerHTML = '<tr><td class="empty" colspan="8"><strong>找不到符合條件的產品</strong>請調整搜尋文字或產品類別。</td></tr>';
+        return;
+      }
+
+      if (!visible.some((product) => product.id === expandedProductId)) expandedProductId = null;
+
+      productList.innerHTML = visible.map((product) => {
+        const state = getSelectedState(product);
+        const variant = getVariant(product, state);
+        const difference = variant.retail - variant.education;
+        const savingClass = difference === 0 ? 'saving is-zero' : 'saving';
+        const partNumberClass = variant.partNumber === UNKNOWN_PART_NUMBER ? 'part-number is-pending' : 'part-number';
+        const isExpanded = expandedProductId === product.id;
+        const productId = escapeHtml(product.id);
+        return '<tr class="product-row' + (isExpanded ? ' is-expanded' : '') + '" data-product-id="' + productId + '" tabindex="0" role="button" aria-expanded="' + isExpanded + '" aria-controls="details-' + productId + '">' +
+          '<td class="category">' + escapeHtml(product.category) + '</td>' +
+          '<td class="product-name">' + escapeHtml(product.name) + '</td>' +
+          '<td class="config-summary"><span class="summary-text">' + escapeHtml(variant.detail) + '</span></td>' +
+          '<td class="' + partNumberClass + '">' + escapeHtml(variant.partNumber) + '</td>' +
+          '<td class="price">' + formatMoney(variant.retail) + '</td>' +
+          '<td class="price education-price">' + formatMoney(variant.education) + '</td>' +
+          '<td class="' + savingClass + '">' + (difference ? formatMoney(difference) : '同價') + '</td>' +
+          '<td class="official-links"><a href="' + product.eduUrl + '" target="_blank" rel="noreferrer">教育商店</a><span>/</span><a href="' + product.retailUrl + '" target="_blank" rel="noreferrer">一般商店</a></td>' +
+          '</tr>' +
+          '<tr class="detail-row" id="details-' + productId + '"' + (isExpanded ? '' : ' hidden') + '><td colspan="8"><div class="detail-panel"><div class="detail-heading">完整配置</div>' + renderControls(product, state, variant) + '</div></td></tr>';
+      }).join('');
+    }
+
+    function setActiveCategory(category) {
+      activeCategory = category;
+      categoryButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.category === category)));
+    }
+
+    function toggleProduct(productId, restoreFocus) {
+      expandedProductId = expandedProductId === productId ? null : productId;
+      render();
+      if (restoreFocus) {
+        const row = productList.querySelector('tr[data-product-id="' + CSS.escape(productId) + '"]');
+        if (row) row.focus();
+      }
+    }
+
+    function reset() {
+      searchInput.value = '';
+      setActiveCategory('全部');
+      Object.keys(selectionState).forEach((key) => delete selectionState[key]);
+      expandedProductId = null;
+      render();
+      searchInput.focus();
+    }
+
+    productList.addEventListener('change', (event) => {
+      const select = event.target.closest('select[data-product-id]');
+      if (!select) return;
+      const productId = select.dataset.productId;
+      selectionState[productId] = Object.assign({}, selectionState[productId] || {}, { [select.dataset.key]: select.value });
+      render();
+    });
+
+    productList.addEventListener('click', (event) => {
+      if (event.target.closest('a')) return;
+      const row = event.target.closest('tr.product-row');
+      if (!row) return;
+      toggleProduct(row.dataset.productId, true);
+    });
+
+    productList.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const row = event.target.closest('tr.product-row');
+      if (!row) return;
+      event.preventDefault();
+      toggleProduct(row.dataset.productId, true);
+    });
+
+    searchInput.addEventListener('input', render);
+    categoryButtons.forEach((button) => button.addEventListener('click', () => {
+      setActiveCategory(button.dataset.category);
+      render();
+    }));
+    resetButton.addEventListener('click', reset);
+
+    setActiveCategory('全部');
+    render();
+  </script>
+</body>
+</html>
